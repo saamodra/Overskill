@@ -5,12 +5,9 @@
  */
 package instruktur;
 
-import java.awt.Insets;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -18,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
 import overskill.OSLib;
+import overskill.OSSession;
 
 /**
  *
@@ -43,6 +41,7 @@ public class Soal extends javax.swing.JFrame {
         loadData("");
         loadSubmission();
         addColumn();
+        hideLabel();
     }
 
     
@@ -60,6 +59,7 @@ public class Soal extends javax.swing.JFrame {
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
         loadData("");
+        OSLib.tableSettings(tblMaster);
         tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(1));
         tblMaster.packAll();
     }
@@ -73,7 +73,7 @@ public class Soal extends javax.swing.JFrame {
             
             c.stat = c.conn.createStatement();
             String sql = "SELECT * FROM Soal s JOIN Submission sm ON s.ID_Submission = sm.ID_Submission "
-                    + "JOIN Kelas k ON k.ID_Kelas = sm.ID_Kelas WHERE s.Status='1'";
+                    + "JOIN Kelas k ON k.ID_Kelas = sm.ID_Kelas WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
             int no = 1;
@@ -106,10 +106,11 @@ public class Soal extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Submission WHERE Status='1'";
+            String sql = "SELECT * FROM Submission s JOIN Kelas k ON s.ID_Kelas = k.ID_Kelas "
+                    + "WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
-            
+            cmbSubmission.addItem("Pilih Submission..");
             while(c.result.next()) {
                 ResultSet r = c.result;
                 id_submission.add(r.getString("ID_Submission"));
@@ -152,25 +153,25 @@ public class Soal extends javax.swing.JFrame {
     private void saveData() {
         int i = cmbSubmission.getSelectedIndex();
         int count = sumQuestion(id_submission.get(i));
-        
-        if(count > 5) {
-            JOptionPane.showMessageDialog(this, "Soal sudah mencapai maksimum.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
-        } else {
+        System.out.println(String.valueOf(count));
+        if(count < 5) {
             
             try {
                 String query = "INSERT INTO Soal (ID_Submission, Soal) VALUES (?,?)";
 
-                PreparedStatement p = connection.conn.prepareStatement(query);
-                p.setString(1, id_submission.get(i));
-                p.setString(2, txtSoal.getText());
-
-                p.executeUpdate();
-                p.close();
-
+                try (PreparedStatement p = connection.conn.prepareStatement(query)) {
+                    p.setString(1, id_submission.get(i));
+                    p.setString(2, txtSoal.getText());
+                    
+                    p.executeUpdate();
+                }
+                
                 JOptionPane.showMessageDialog(this, "Data soal berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
             } catch(SQLException e) {
                 System.out.println("Terjadi error pada saat tambah jadwal : " + e);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Soal sudah mencapai maksimum.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         }
     }
     
@@ -181,15 +182,14 @@ public class Soal extends javax.swing.JFrame {
         try {
             String query = "UPDATE Soal SET ID_Submission=?, Soal=? WHERE ID_Soal=?";
          
-            PreparedStatement p = connection.conn.prepareStatement(query);
-            
-            p.setString(1, id_submission.get(i));
-            p.setString(2, txtSoal.getText());
-            p.setString(3, id_soal);
-            
-            
-            p.executeUpdate();
-            p.close();
+            try (PreparedStatement p = connection.conn.prepareStatement(query)) {
+                p.setString(1, id_submission.get(i));
+                p.setString(2, txtSoal.getText());
+                p.setString(3, id_soal);
+                
+                
+                p.executeUpdate();
+            }
 
             JOptionPane.showMessageDialog(this, "Data Submission berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
@@ -199,8 +199,21 @@ public class Soal extends javax.swing.JFrame {
     
     private void ClearForm() {
         id_soal = null;
-        cmbSubmission.setSelectedIndex(-1);
+        cmbSubmission.setSelectedItem("Pilih Submission..");
         txtSoal.setText("");
+        hideLabel();
+    }
+    
+    private boolean validateAll() {
+        boolean submission = OSLib.comboRequired(cmbSubmission.getSelectedItem().toString(), "Pilih Submission..", lblSubmission);
+        boolean soal = OSLib.fieldRequired(txtSoal.getText(), lblSoal);
+        
+        return soal && submission;
+    }
+    
+    private void hideLabel() {
+        lblSoal.setVisible(false);
+        lblSubmission.setVisible(false);
     }
     
     public JPanel getPanel() {
@@ -231,14 +244,17 @@ public class Soal extends javax.swing.JFrame {
         btnUbah = new components.MaterialButton();
         btnHapus = new components.MaterialButton();
         btnBatal = new components.MaterialButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtSoal = new components.UITextArea();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtSoal = new org.jdesktop.swingx.JXTextArea();
+        lblSubmission = new javax.swing.JLabel();
+        lblSoal = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblMaster = new org.jdesktop.swingx.JXTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
+        PanelContent.setBackground(new java.awt.Color(250, 250, 250));
         PanelContent.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 PanelContentformComponentShown(evt);
@@ -248,6 +264,7 @@ public class Soal extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 75));
+        jPanel2.setOpaque(false);
         jPanel2.setPreferredSize(new java.awt.Dimension(954, 75));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -259,6 +276,7 @@ public class Soal extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 0, 20));
         jPanel3.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel3.setOpaque(false);
         jPanel3.setPreferredSize(new java.awt.Dimension(954, 50));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -285,22 +303,28 @@ public class Soal extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel7))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         PanelContent.add(jPanel3);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel1.setMaximumSize(new java.awt.Dimension(310, 32767));
+        jPanel1.setOpaque(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(310, 449));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("Submission");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         cmbSubmission.setPreferredSize(new java.awt.Dimension(56, 30));
+        jPanel1.add(cmbSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 188, -1));
 
         jLabel3.setText("Soal");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
 
         btnTambah.setBackground(new java.awt.Color(40, 167, 69));
         btnTambah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -310,6 +334,7 @@ public class Soal extends javax.swing.JFrame {
                 btnTambahActionPerformed(evt);
             }
         });
+        jPanel1.add(btnTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
         btnUbah.setBackground(new java.awt.Color(255, 193, 7));
         btnUbah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -324,6 +349,7 @@ public class Soal extends javax.swing.JFrame {
                 btnUbahActionPerformed(evt);
             }
         });
+        jPanel1.add(btnUbah, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 85, -1));
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
         btnHapus.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -333,6 +359,7 @@ public class Soal extends javax.swing.JFrame {
                 btnHapusActionPerformed(evt);
             }
         });
+        jPanel1.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, -1, -1));
 
         btnBatal.setBackground(new java.awt.Color(0, 49, 45));
         btnBatal.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -342,57 +369,23 @@ public class Soal extends javax.swing.JFrame {
                 btnBatalActionPerformed(evt);
             }
         });
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, 270, -1));
 
-        txtSoal.setAe_Placeholder(" ");
-        jScrollPane2.setViewportView(txtSoal);
+        txtSoal.setColumns(20);
+        txtSoal.setLineWrap(true);
+        txtSoal.setRows(5);
+        txtSoal.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txtSoal);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cmbSubmission, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(31, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbSubmission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(162, Short.MAX_VALUE))
-        );
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 188, -1));
+
+        lblSubmission.setForeground(new java.awt.Color(255, 51, 51));
+        lblSubmission.setText("Wajib diisi.");
+        jPanel1.add(lblSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+
+        lblSoal.setForeground(new java.awt.Color(255, 51, 51));
+        lblSoal.setText("Wajib diisi.");
+        jPanel1.add(lblSoal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, -1, -1));
 
         jPanel4.add(jPanel1);
 
@@ -424,9 +417,13 @@ public class Soal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        saveData();
-        ClearForm();
-        formLoad();
+        if(validateAll()) {
+            saveData();
+            ClearForm();
+            formLoad();
+        } else {
+            JOptionPane.showMessageDialog(this, "Isi data dengan lengkap.", "Gagal",  JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void PanelContentformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelContentformComponentShown
@@ -440,10 +437,13 @@ public class Soal extends javax.swing.JFrame {
         } 
         else 
         {
-            OSLib.deleteData("Soal", "ID_Soal", id_soal);
-            JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
-            ClearForm();
-            formLoad();
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                OSLib.deleteData("Soal", "ID_Soal", id_soal);
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+                ClearForm();
+                formLoad();
+            }
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
@@ -547,9 +547,11 @@ public class Soal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblSoal;
+    private javax.swing.JLabel lblSubmission;
     private org.jdesktop.swingx.JXTable tblMaster;
-    private components.UITextArea txtSoal;
+    private org.jdesktop.swingx.JXTextArea txtSoal;
     // End of variables declaration//GEN-END:variables
 }

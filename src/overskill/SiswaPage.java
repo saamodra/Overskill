@@ -13,12 +13,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import master.Instruktur;
-import master.Kelas;
-import master.Komputer;
-import master.Siswa;
-import master.User;
-import master.Jadwal;
+import admin.Instruktur;
+import admin.Kelas;
+import admin.Komputer;
+import admin.Siswa;
+import admin.User;
+import admin.Jadwal;
 import siswa.Feedback;
 import siswa.Jawaban;
 import siswa.Submission_Siswa;
@@ -58,7 +58,7 @@ public class SiswaPage extends javax.swing.JFrame {
 
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.setMaximizedBounds(env.getMaximumWindowBounds());
-        this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
+        this.setExtendedState(this.getExtendedState() | SiswaPage.MAXIMIZED_BOTH);
         
         setMark(mark1);
         
@@ -89,10 +89,6 @@ public class SiswaPage extends javax.swing.JFrame {
         mark1.setVisible(false);
         mark2.setVisible(false);
         mark3.setVisible(false);
-        mark4.setVisible(false);
-        mark5.setVisible(false);
-        mark6.setVisible(false);
-        mark7.setVisible(false);
         
         myPanel.setVisible(true);
     }
@@ -127,16 +123,12 @@ public class SiswaPage extends javax.swing.JFrame {
         iconMenu = new javax.swing.JLabel();
         btnMenu = new MaterialButton();
         rightHeader = new javax.swing.JPanel();
-        iconMenu1 = new javax.swing.JLabel();
-        btnLogout = new MaterialButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnLogout = new components.MaterialIconButton();
         NavBrand = new javax.swing.JPanel();
         iconLadetani = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JSplitPane();
         Slide = new javax.swing.JPanel();
-        iconDriver = new javax.swing.JLabel();
-        iconKelolaUser = new javax.swing.JLabel();
-        btnMasterKomputer = new MaterialButton();
-        btnMasterKelas = new MaterialButton();
         iconUser = new javax.swing.JLabel();
         textNama = new javax.swing.JLabel();
         iconJenis = new javax.swing.JLabel();
@@ -144,20 +136,12 @@ public class SiswaPage extends javax.swing.JFrame {
         iconDashboard = new javax.swing.JLabel();
         btnDashboard = new MaterialButton();
         textRole = new javax.swing.JLabel();
-        iconProdusen = new javax.swing.JLabel();
-        btnMasterSiswa = new MaterialButton();
         iconProduk = new javax.swing.JLabel();
         btnSubmission = new MaterialButton();
         mark1 = new javax.swing.JPanel();
         mark2 = new javax.swing.JPanel();
         mark3 = new javax.swing.JPanel();
-        mark4 = new javax.swing.JPanel();
-        mark5 = new javax.swing.JPanel();
-        mark6 = new javax.swing.JPanel();
         Separator2 = new javax.swing.JSeparator();
-        iconDriver1 = new javax.swing.JLabel();
-        btnMasterJadwal = new MaterialButton();
-        mark7 = new javax.swing.JPanel();
         Content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -180,15 +164,15 @@ public class SiswaPage extends javax.swing.JFrame {
         Header.setPreferredSize(new java.awt.Dimension(700, 52));
         Header.setLayout(new java.awt.GridLayout(1, 0));
 
-        leftHeader.setBackground(new java.awt.Color(244, 103, 79));
+        leftHeader.setBackground(new java.awt.Color(26, 41, 66));
         leftHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iconMenu.setBackground(new java.awt.Color(244, 103, 79));
+        iconMenu.setBackground(new java.awt.Color(26, 41, 66));
         iconMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu_25px.png"))); // NOI18N
         leftHeader.add(iconMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 50));
 
-        btnMenu.setBackground(new java.awt.Color(244, 103, 79));
+        btnMenu.setBackground(new java.awt.Color(26, 41, 66));
         btnMenu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnMenu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -200,41 +184,52 @@ public class SiswaPage extends javax.swing.JFrame {
 
         Header.add(leftHeader);
 
-        rightHeader.setBackground(new java.awt.Color(244, 103, 79));
-        rightHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        rightHeader.setBackground(new java.awt.Color(22, 43, 70));
+        rightHeader.setLayout(new javax.swing.BoxLayout(rightHeader, javax.swing.BoxLayout.LINE_AXIS));
 
-        iconMenu1.setBackground(new java.awt.Color(244, 103, 79));
-        iconMenu1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        iconMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shutdown_25px.png"))); // NOI18N
-        rightHeader.add(iconMenu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 60, 50));
+        jPanel2.setBackground(new java.awt.Color(26, 41, 66));
 
-        btnLogout.setBackground(new java.awt.Color(244, 103, 79));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnLogout.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        rightHeader.add(jPanel2);
+
+        btnLogout.setBackground(new java.awt.Color(26, 41, 66));
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shutdown_25px.png"))); // NOI18N
+        btnLogout.setMaximumSize(new java.awt.Dimension(110, 3224));
+        btnLogout.setPreferredSize(new java.awt.Dimension(50, 33));
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogoutActionPerformed(evt);
             }
         });
-        rightHeader.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 60, 50));
+        rightHeader.add(btnLogout);
 
         Header.add(rightHeader);
 
         topPanel.setRightComponent(Header);
 
-        NavBrand.setBackground(new java.awt.Color(21, 23, 27));
+        NavBrand.setBackground(new java.awt.Color(255, 89, 61));
         NavBrand.setMaximumSize(new java.awt.Dimension(240, 32767));
         NavBrand.setPreferredSize(new java.awt.Dimension(240, 47));
         NavBrand.setLayout(null);
 
-        iconLadetani.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        iconLadetani.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         iconLadetani.setForeground(new java.awt.Color(255, 255, 255));
-        iconLadetani.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        iconLadetani.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconLadetani.setText("OVERSKILL");
         iconLadetani.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         iconLadetani.setIconTextGap(10);
         NavBrand.add(iconLadetani);
-        iconLadetani.setBounds(20, 0, 190, 50);
+        iconLadetani.setBounds(0, 0, 300, 50);
 
         topPanel.setLeftComponent(NavBrand);
 
@@ -245,41 +240,9 @@ public class SiswaPage extends javax.swing.JFrame {
         bottomPanel.setDividerSize(0);
         bottomPanel.setMinimumSize(new java.awt.Dimension(148, 60));
 
-        Slide.setBackground(new java.awt.Color(39, 44, 50));
+        Slide.setBackground(new java.awt.Color(26, 41, 66));
         Slide.setPreferredSize(new java.awt.Dimension(98, 695));
         Slide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        iconDriver.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        iconDriver.setForeground(new java.awt.Color(255, 255, 255));
-        iconDriver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/class_25px.png"))); // NOI18N
-        iconDriver.setText("   Master Kelas");
-        Slide.add(iconDriver, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 440, 200, 50));
-
-        iconKelolaUser.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        iconKelolaUser.setForeground(new java.awt.Color(255, 255, 255));
-        iconKelolaUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/computer_25px.png"))); // NOI18N
-        iconKelolaUser.setText("   Master Komputer");
-        Slide.add(iconKelolaUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 380, 200, 50));
-
-        btnMasterKomputer.setBackground(new java.awt.Color(39, 44, 50));
-        btnMasterKomputer.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnMasterKomputer.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnMasterKomputer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterKomputerActionPerformed(evt);
-            }
-        });
-        Slide.add(btnMasterKomputer, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 380, 295, 50));
-
-        btnMasterKelas.setBackground(new java.awt.Color(39, 44, 50));
-        btnMasterKelas.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnMasterKelas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnMasterKelas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterKelasActionPerformed(evt);
-            }
-        });
-        Slide.add(btnMasterKelas, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 295, 50));
 
         iconUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/male_user_40px.png"))); // NOI18N
         Slide.add(iconUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 50, 50));
@@ -294,9 +257,9 @@ public class SiswaPage extends javax.swing.JFrame {
         iconJenis.setForeground(new java.awt.Color(255, 255, 255));
         iconJenis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/feedback_25px.png"))); // NOI18N
         iconJenis.setText("   Feedback");
-        Slide.add(iconJenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 260, 200, 50));
+        Slide.add(iconJenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 240, 200, 50));
 
-        btnFeedback.setBackground(new java.awt.Color(39, 44, 50));
+        btnFeedback.setBackground(new java.awt.Color(42, 64, 84));
         btnFeedback.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnFeedback.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnFeedback.addActionListener(new java.awt.event.ActionListener() {
@@ -304,7 +267,7 @@ public class SiswaPage extends javax.swing.JFrame {
                 btnFeedbackActionPerformed(evt);
             }
         });
-        Slide.add(btnFeedback, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 260, 295, 50));
+        Slide.add(btnFeedback, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 240, 295, 50));
 
         iconDashboard.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         iconDashboard.setForeground(new java.awt.Color(255, 255, 255));
@@ -312,7 +275,7 @@ public class SiswaPage extends javax.swing.JFrame {
         iconDashboard.setText("   Dashboard");
         Slide.add(iconDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 140, 200, 50));
 
-        btnDashboard.setBackground(new java.awt.Color(39, 44, 50));
+        btnDashboard.setBackground(new java.awt.Color(42, 64, 84));
         btnDashboard.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnDashboard.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnDashboard.addActionListener(new java.awt.event.ActionListener() {
@@ -328,29 +291,13 @@ public class SiswaPage extends javax.swing.JFrame {
         textRole.setText("Siswa");
         Slide.add(textRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 20));
 
-        iconProdusen.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        iconProdusen.setForeground(new java.awt.Color(255, 255, 255));
-        iconProdusen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/student_male_25px.png"))); // NOI18N
-        iconProdusen.setText("   Master Siswa");
-        Slide.add(iconProdusen, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 320, 200, 50));
-
-        btnMasterSiswa.setBackground(new java.awt.Color(39, 44, 50));
-        btnMasterSiswa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnMasterSiswa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnMasterSiswa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterSiswaActionPerformed(evt);
-            }
-        });
-        Slide.add(btnMasterSiswa, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 320, 295, 50));
-
         iconProduk.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
         iconProduk.setForeground(new java.awt.Color(255, 255, 255));
         iconProduk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/submit_document_25px.png"))); // NOI18N
         iconProduk.setText("   Submission");
-        Slide.add(iconProduk, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 200, 200, 50));
+        Slide.add(iconProduk, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 190, 200, 50));
 
-        btnSubmission.setBackground(new java.awt.Color(39, 44, 50));
+        btnSubmission.setBackground(new java.awt.Color(42, 64, 84));
         btnSubmission.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSubmission.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnSubmission.addActionListener(new java.awt.event.ActionListener() {
@@ -358,9 +305,9 @@ public class SiswaPage extends javax.swing.JFrame {
                 btnSubmissionActionPerformed(evt);
             }
         });
-        Slide.add(btnSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 200, 295, 50));
+        Slide.add(btnSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 190, 295, 50));
 
-        mark1.setBackground(new java.awt.Color(244, 103, 79));
+        mark1.setBackground(new java.awt.Color(226, 42, 111));
 
         javax.swing.GroupLayout mark1Layout = new javax.swing.GroupLayout(mark1);
         mark1.setLayout(mark1Layout);
@@ -375,7 +322,7 @@ public class SiswaPage extends javax.swing.JFrame {
 
         Slide.add(mark1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 5, 50));
 
-        mark2.setBackground(new java.awt.Color(244, 103, 79));
+        mark2.setBackground(new java.awt.Color(226, 42, 111));
 
         javax.swing.GroupLayout mark2Layout = new javax.swing.GroupLayout(mark2);
         mark2.setLayout(mark2Layout);
@@ -388,9 +335,9 @@ public class SiswaPage extends javax.swing.JFrame {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        Slide.add(mark2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 5, 50));
+        Slide.add(mark2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 5, 50));
 
-        mark3.setBackground(new java.awt.Color(244, 103, 79));
+        mark3.setBackground(new java.awt.Color(226, 42, 111));
 
         javax.swing.GroupLayout mark3Layout = new javax.swing.GroupLayout(mark3);
         mark3.setLayout(mark3Layout);
@@ -403,86 +350,11 @@ public class SiswaPage extends javax.swing.JFrame {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        Slide.add(mark3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 5, 50));
-
-        mark4.setBackground(new java.awt.Color(244, 103, 79));
-
-        javax.swing.GroupLayout mark4Layout = new javax.swing.GroupLayout(mark4);
-        mark4.setLayout(mark4Layout);
-        mark4Layout.setHorizontalGroup(
-            mark4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
-        );
-        mark4Layout.setVerticalGroup(
-            mark4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
-        Slide.add(mark4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 5, 50));
-
-        mark5.setBackground(new java.awt.Color(244, 103, 79));
-
-        javax.swing.GroupLayout mark5Layout = new javax.swing.GroupLayout(mark5);
-        mark5.setLayout(mark5Layout);
-        mark5Layout.setHorizontalGroup(
-            mark5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
-        );
-        mark5Layout.setVerticalGroup(
-            mark5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
-        Slide.add(mark5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 5, 50));
-
-        mark6.setBackground(new java.awt.Color(244, 103, 79));
-
-        javax.swing.GroupLayout mark6Layout = new javax.swing.GroupLayout(mark6);
-        mark6.setLayout(mark6Layout);
-        mark6Layout.setHorizontalGroup(
-            mark6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
-        );
-        mark6Layout.setVerticalGroup(
-            mark6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
-        Slide.add(mark6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 5, 50));
+        Slide.add(mark3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 5, 50));
 
         Separator2.setBackground(new java.awt.Color(91, 91, 91));
+        Separator2.setForeground(new java.awt.Color(72, 88, 102));
         Slide.add(Separator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 125, 300, 15));
-
-        iconDriver1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
-        iconDriver1.setForeground(new java.awt.Color(255, 255, 255));
-        iconDriver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/class_25px.png"))); // NOI18N
-        iconDriver1.setText("  Master Jadwa l");
-        Slide.add(iconDriver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 500, 200, 50));
-
-        btnMasterJadwal.setBackground(new java.awt.Color(39, 44, 50));
-        btnMasterJadwal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnMasterJadwal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnMasterJadwal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMasterJadwalActionPerformed(evt);
-            }
-        });
-        Slide.add(btnMasterJadwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 500, 295, 50));
-
-        mark7.setBackground(new java.awt.Color(244, 103, 79));
-
-        javax.swing.GroupLayout mark7Layout = new javax.swing.GroupLayout(mark7);
-        mark7.setLayout(mark7Layout);
-        mark7Layout.setHorizontalGroup(
-            mark7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
-        );
-        mark7Layout.setVerticalGroup(
-            mark7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-        );
-
-        Slide.add(mark7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, -1, 50));
 
         bottomPanel.setLeftComponent(Slide);
 
@@ -544,18 +416,6 @@ public class SiswaPage extends javax.swing.JFrame {
         }; th.start();
     }//GEN-LAST:event_btnMenuActionPerformed
 
-    private void btnMasterKomputerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterKomputerActionPerformed
-        // TODO add your handling code here:
-        contentLayout.show(Content, "masterKomputer");
-        setMark(mark5);
-    }//GEN-LAST:event_btnMasterKomputerActionPerformed
-
-    private void btnMasterKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterKelasActionPerformed
-        // TODO add your handling code here:
-        contentLayout.show(Content, "masterKelas");
-        setMark(mark6);
-    }//GEN-LAST:event_btnMasterKelasActionPerformed
-
     private void btnFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedbackActionPerformed
         // TODO add your handling code here:
         contentLayout.show(Content, "feedback");
@@ -567,12 +427,6 @@ public class SiswaPage extends javax.swing.JFrame {
         contentLayout.show(Content, "dashboard");
         setMark(mark1);
     }//GEN-LAST:event_btnDashboardActionPerformed
-
-    private void btnMasterSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterSiswaActionPerformed
-        // TODO add your handling code here:
-        contentLayout.show(Content, "masterSiswa");
-        setMark(mark4);
-    }//GEN-LAST:event_btnMasterSiswaActionPerformed
 
     private void btnSubmissionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmissionActionPerformed
         // TODO add your handling code here:
@@ -587,17 +441,10 @@ public class SiswaPage extends javax.swing.JFrame {
 //        this.dispose();
     }//GEN-LAST:event_btnNavLoginActionPerformed
 
-    private void btnMasterJadwalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterJadwalActionPerformed
-        // TODO add your handling code here:
-        contentLayout.show(Content, "masterJadwal");
-        setMark(mark7);
-    }//GEN-LAST:event_btnMasterJadwalActionPerformed
-
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         Login l = new Login();
         l.setVisible(true);
         dispose();
-
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
@@ -641,32 +488,20 @@ public class SiswaPage extends javax.swing.JFrame {
     private javax.swing.JSplitPane bottomPanel;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnFeedback;
-    private javax.swing.JButton btnLogout;
-    private javax.swing.JButton btnMasterJadwal;
-    private javax.swing.JButton btnMasterKelas;
-    private javax.swing.JButton btnMasterKomputer;
-    private javax.swing.JButton btnMasterSiswa;
+    private components.MaterialIconButton btnLogout;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnSubmission;
     private javax.swing.JLabel iconDashboard;
-    private javax.swing.JLabel iconDriver;
-    private javax.swing.JLabel iconDriver1;
     private javax.swing.JLabel iconJenis;
-    private javax.swing.JLabel iconKelolaUser;
     private javax.swing.JLabel iconLadetani;
     private javax.swing.JLabel iconMenu;
-    private javax.swing.JLabel iconMenu1;
     private javax.swing.JLabel iconProduk;
-    private javax.swing.JLabel iconProdusen;
     private javax.swing.JLabel iconUser;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel leftHeader;
     private javax.swing.JPanel mark1;
     private javax.swing.JPanel mark2;
     private javax.swing.JPanel mark3;
-    private javax.swing.JPanel mark4;
-    private javax.swing.JPanel mark5;
-    private javax.swing.JPanel mark6;
-    private javax.swing.JPanel mark7;
     private javax.swing.JPanel rightHeader;
     private javax.swing.JLabel textNama;
     private javax.swing.JLabel textRole;

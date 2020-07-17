@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
 import overskill.OSLib;
+import overskill.OSSession;
 
 /**
  *
@@ -44,11 +45,12 @@ public class Submission extends javax.swing.JFrame {
         addColumn();
         txtDueDate.setFormats( DateFormat.getDateTimeInstance( DateFormat.SHORT, DateFormat.MEDIUM ) );
         txtDueDate.setTimeFormat( DateFormat.getTimeInstance( DateFormat.MEDIUM ) );
+        hideLabel();
+        ClearForm();
     }
 
     
     private void addColumn() {
-        
         String colTitles[] = {"No. ", "ID Submission", "ID Kelas", "Nama Kelas", "Judul", "Duedate", "Deskripsi"};
         boolean[] isEditable = {false,false,false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
@@ -60,6 +62,7 @@ public class Submission extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
+        OSLib.tableSettings(tblMaster);
         loadData("");
     }
     
@@ -71,7 +74,8 @@ public class Submission extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Submission s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas WHERE s.Status='1'";
+            String sql = "SELECT * FROM Submission s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas "
+                    + "WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
             int no = 1;
@@ -79,7 +83,7 @@ public class Submission extends javax.swing.JFrame {
             while(c.result.next()) {
                 ResultSet r = c.result;
                 Object obj[] = new Object[7];
-                obj[0] = no;
+                obj[0] = no++;
                 obj[1] = r.getString("ID_Submission");
                 obj[2] = r.getString("ID_Kelas");
                 obj[3] = r.getString("Nama_Kelas");
@@ -87,7 +91,6 @@ public class Submission extends javax.swing.JFrame {
                 obj[5] = datetimef.format(r.getTimestamp("Duedate"));
                 obj[6] = r.getString("Deskripsi");
                 
-                no++;
                 model.addRow(obj);
             }
             c.stat.close();
@@ -107,10 +110,11 @@ public class Submission extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Kelas WHERE Status='1' AND Status_Kelas='1'";
+            String sql = "SELECT * FROM Kelas WHERE ID_Instruktur = '" + OSSession.getId() + "' AND Status='1' AND Status_Kelas='1'";
             
             c.result = c.stat.executeQuery(sql);
             
+            cmbKelas.addItem("Pilih Kelas..");
             while(c.result.next()) {
                 ResultSet r = c.result;
                 id_kelas.add(r.getString("ID_Kelas"));
@@ -133,15 +137,15 @@ public class Submission extends javax.swing.JFrame {
             String id_sm = OSLib.AutoNumber("Submission", "ID_Submission", "SM");
             String query = "INSERT INTO Submission (ID_Submission, ID_Kelas, Judul, Duedate, Deskripsi) VALUES (?,?,?,?,?)";
          
-            PreparedStatement p = connection.conn.prepareStatement(query);
-            p.setString(1, id_sm);
-            p.setString(2, id_kelas.get(i));
-            p.setString(3, txtJudul.getText());
-            p.setTimestamp(4, tglDuedate);
-            p.setString(5, txtDeskripsi.getText());
-            
-            p.executeUpdate();
-            p.close();
+            try (PreparedStatement p = connection.conn.prepareStatement(query)) {
+                p.setString(1, id_sm);
+                p.setString(2, id_kelas.get(i));
+                p.setString(3, txtJudul.getText());
+                p.setTimestamp(4, tglDuedate);
+                p.setString(5, txtDeskripsi.getText());
+                
+                p.executeUpdate();
+            }
 
             JOptionPane.showMessageDialog(this, "Data Submission berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
@@ -157,16 +161,15 @@ public class Submission extends javax.swing.JFrame {
         try {
             String query = "UPDATE Submission SET ID_Kelas=?, Judul=?, Duedate=?, Deskripsi=? WHERE ID_Submission=?";
          
-            PreparedStatement p = connection.conn.prepareStatement(query);
-            
-            p.setString(1, id_kelas.get(i));
-            p.setString(2, txtJudul.getText());
-            p.setTimestamp(3, tglDuedate);
-            p.setString(4, txtDeskripsi.getText());
-            p.setString(5, id_submission);
-            
-            p.executeUpdate();
-            p.close();
+            try (PreparedStatement p = connection.conn.prepareStatement(query)) {
+                p.setString(1, id_kelas.get(i));
+                p.setString(2, txtJudul.getText());
+                p.setTimestamp(3, tglDuedate);
+                p.setString(4, txtDeskripsi.getText());
+                p.setString(5, id_submission);
+                
+                p.executeUpdate();
+            }
 
             JOptionPane.showMessageDialog(this, "Data Submission berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
@@ -179,7 +182,24 @@ public class Submission extends javax.swing.JFrame {
         txtDeskripsi.setText("");
         txtDueDate.setDate(null);
         txtJudul.setText("");
-        cmbKelas.setSelectedIndex(-1);
+        cmbKelas.setSelectedItem("Pilih Kelas..");
+        hideLabel();
+    }
+    
+    private boolean validateAll() {
+        boolean kelas = OSLib.comboRequired(cmbKelas.getSelectedItem().toString(), "Pilih Kelas..", lblKelas);
+        boolean judul = OSLib.fieldRequired(txtJudul.getText(), lblJudul);
+        boolean duedate = OSLib.dateRequired(txtDueDate.getDate(), lblDueDate);
+        boolean deskripsi = OSLib.fieldRequired(txtDeskripsi.getText(), lblDeskripsi);
+        
+        return kelas && judul && duedate && deskripsi;
+    }
+    
+    private void hideLabel() {
+        lblDeskripsi.setVisible(false);
+        lblDueDate.setVisible(false);
+        lblJudul.setVisible(false);
+        lblKelas.setVisible(false);
     }
     
     public JPanel getPanel() {
@@ -206,21 +226,27 @@ public class Submission extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         cmbKelas = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        txtJudul = new components.UITextField();
         jLabel5 = new javax.swing.JLabel();
-        txtDeskripsi = new components.UITextField();
         jLabel6 = new javax.swing.JLabel();
         btnTambah = new components.MaterialButton();
         btnUbah = new components.MaterialButton();
         btnHapus = new components.MaterialButton();
         txtDueDate = new components.DateTimePicker();
         btnBatal = new components.MaterialButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblMaster = new javax.swing.JTable();
+        txtJudul = new org.jdesktop.swingx.JXTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtDeskripsi = new org.jdesktop.swingx.JXTextArea();
+        lblKelas = new javax.swing.JLabel();
+        lblJudul = new javax.swing.JLabel();
+        lblDueDate = new javax.swing.JLabel();
+        lblDeskripsi = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblMaster = new org.jdesktop.swingx.JXTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
+        PanelContent.setBackground(new java.awt.Color(250, 250, 250));
         PanelContent.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 PanelContentformComponentShown(evt);
@@ -230,6 +256,7 @@ public class Submission extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 75));
+        jPanel2.setOpaque(false);
         jPanel2.setPreferredSize(new java.awt.Dimension(954, 75));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -241,6 +268,7 @@ public class Submission extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 0, 20));
         jPanel3.setMaximumSize(new java.awt.Dimension(32767, 50));
+        jPanel3.setOpaque(false);
         jPanel3.setPreferredSize(new java.awt.Dimension(954, 50));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -258,7 +286,7 @@ public class Submission extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(211, 211, 211)
                 .addComponent(jLabel4)
-                .addContainerGap(461, Short.MAX_VALUE))
+                .addContainerGap(608, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,30 +295,35 @@ public class Submission extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel7))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         PanelContent.add(jPanel3);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel1.setMaximumSize(new java.awt.Dimension(280, 32767));
+        jPanel1.setOpaque(false);
         jPanel1.setPreferredSize(new java.awt.Dimension(280, 449));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("Kelas");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
+        cmbKelas.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         cmbKelas.setPreferredSize(new java.awt.Dimension(56, 30));
+        jPanel1.add(cmbKelas, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 188, -1));
 
         jLabel3.setText("Judul");
-
-        txtJudul.setAe_Placeholder("Judul");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jLabel5.setText("Deskripsi");
-
-        txtDeskripsi.setAe_Placeholder("Deskripsi");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
         jLabel6.setText("Duedate");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         btnTambah.setBackground(new java.awt.Color(40, 167, 69));
         btnTambah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -300,6 +333,7 @@ public class Submission extends javax.swing.JFrame {
                 btnTambahActionPerformed(evt);
             }
         });
+        jPanel1.add(btnTambah, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
 
         btnUbah.setBackground(new java.awt.Color(255, 193, 7));
         btnUbah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -314,6 +348,7 @@ public class Submission extends javax.swing.JFrame {
                 btnUbahActionPerformed(evt);
             }
         });
+        jPanel1.add(btnUbah, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, -1, -1));
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
         btnHapus.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -323,8 +358,10 @@ public class Submission extends javax.swing.JFrame {
                 btnHapusActionPerformed(evt);
             }
         });
+        jPanel1.add(btnHapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, -1, -1));
 
         txtDueDate.setPreferredSize(new java.awt.Dimension(112, 30));
+        jPanel1.add(txtDueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 188, -1));
 
         btnBatal.setBackground(new java.awt.Color(0, 49, 45));
         btnBatal.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -334,74 +371,40 @@ public class Submission extends javax.swing.JFrame {
                 btnBatalActionPerformed(evt);
             }
         });
+        jPanel1.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 254, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDueDate, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnBatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(16, 16, 16))
-        );
+        txtJudul.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtJudul.setPrompt("Judul Submission");
+        jPanel1.add(txtJudul, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 190, 30));
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbKelas, txtDeskripsi, txtJudul});
+        txtDeskripsi.setColumns(20);
+        txtDeskripsi.setLineWrap(true);
+        txtDeskripsi.setRows(5);
+        txtDeskripsi.setWrapStyleWord(true);
+        txtDeskripsi.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtDeskripsi.setPrompt("Deskripsi");
+        jScrollPane2.setViewportView(txtDeskripsi);
 
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtJudul, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtDueDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUbah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
-        );
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 190, -1));
+
+        lblKelas.setForeground(new java.awt.Color(255, 51, 51));
+        lblKelas.setText("Wajib diisi.");
+        jPanel1.add(lblKelas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 35, -1, -1));
+
+        lblJudul.setForeground(new java.awt.Color(255, 51, 51));
+        lblJudul.setText("Wajib diisi.");
+        jPanel1.add(lblJudul, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 95, -1, -1));
+
+        lblDueDate.setForeground(new java.awt.Color(255, 51, 51));
+        lblDueDate.setText("Wajib diisi.");
+        jPanel1.add(lblDueDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 155, -1, -1));
+
+        lblDeskripsi.setForeground(new java.awt.Color(255, 51, 51));
+        lblDeskripsi.setText("Wajib diisi.");
+        jPanel1.add(lblDeskripsi, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, -1, -1));
 
         jPanel4.add(jPanel1);
 
-        tblMaster.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         tblMaster.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -418,9 +421,9 @@ public class Submission extends javax.swing.JFrame {
                 tblMasterMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblMaster);
+        jScrollPane3.setViewportView(tblMaster);
 
-        jPanel4.add(jScrollPane1);
+        jPanel4.add(jScrollPane3);
 
         PanelContent.add(jPanel4);
 
@@ -430,9 +433,13 @@ public class Submission extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-        saveData();
-        ClearForm();
-        formLoad();
+        if(validateAll()) {
+            saveData();
+            ClearForm();
+            formLoad();
+        } else {
+            JOptionPane.showMessageDialog(this, "Isi data dengan lengkap.", "Gagal",  JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void PanelContentformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelContentformComponentShown
@@ -446,11 +453,40 @@ public class Submission extends javax.swing.JFrame {
         } 
         else 
         {
-            OSLib.deleteData("Submission", "ID_Submission", id_submission);
-            JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
-            formLoad();
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                OSLib.deleteData("Submission", "ID_Submission", id_submission);
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+                formLoad();
+            }
         }
     }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
+        if(id_submission == null) 
+        {
+            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau diubah terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
+        } 
+        else 
+        {
+            if(validateAll()) {
+                updateData();
+                ClearForm();
+                formLoad();
+            } else {
+                JOptionPane.showMessageDialog(this, "Isi data dengan lengkap.", "Gagal",  JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_btnUbahActionPerformed
+
+    private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUbahMouseClicked
+
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        ClearForm();
+    }//GEN-LAST:event_btnBatalActionPerformed
 
     private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
         int i = tblMaster.getSelectedRow();
@@ -468,31 +504,7 @@ public class Submission extends javax.swing.JFrame {
             System.out.println(ex);
         }
         txtDeskripsi.setText((String)model.getValueAt(i, 6));
-        
-        
     }//GEN-LAST:event_tblMasterMouseClicked
-
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        if(id_submission == null) 
-        {
-            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau diubah terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
-        } 
-        else 
-        {
-            updateData();
-            ClearForm();
-            formLoad();
-        }
-        
-    }//GEN-LAST:event_btnUbahActionPerformed
-
-    private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUbahMouseClicked
-
-    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
-        ClearForm();
-    }//GEN-LAST:event_btnBatalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -554,10 +566,15 @@ public class Submission extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblMaster;
-    private components.UITextField txtDeskripsi;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblDeskripsi;
+    private javax.swing.JLabel lblDueDate;
+    private javax.swing.JLabel lblJudul;
+    private javax.swing.JLabel lblKelas;
+    private org.jdesktop.swingx.JXTable tblMaster;
+    private org.jdesktop.swingx.JXTextArea txtDeskripsi;
     private components.DateTimePicker txtDueDate;
-    private components.UITextField txtJudul;
+    private org.jdesktop.swingx.JXTextField txtJudul;
     // End of variables declaration//GEN-END:variables
 }

@@ -113,7 +113,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
             
             c.stat = c.conn.createStatement();
             String sql = "SELECT * FROM Submission s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas WHERE "
-                    + "s.ID_Kelas = (SELECT ID_Kelas FROM Pendaftaran WHERE ID_Siswa = '" + OSSession.getId() + "') "
+                    + "s.ID_Kelas IN (SELECT ID_Kelas FROM Pendaftaran WHERE ID_Siswa = '" + OSSession.getId() + "') "
                     + "AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
@@ -140,7 +140,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data instruktur "  + e);
+            System.out.println("Terjadi error saat load data siswa "  + e);
         }
     }
     

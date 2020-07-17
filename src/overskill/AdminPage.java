@@ -13,13 +13,14 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import master.Instruktur;
-import master.Kelas;
-import master.Komputer;
-import master.Siswa;
-import master.User;
-import master.User;
-import master.Jadwal;
+import admin.Instruktur;
+import admin.Kelas;
+import admin.Komputer;
+import admin.Siswa;
+import admin.User;
+import admin.User;
+import admin.Jadwal;
+import admin.Pendaftaran;
 
 
 /**
@@ -47,6 +48,7 @@ public class AdminPage extends javax.swing.JFrame {
         Kelas kel = new Kelas();
         Jadwal jad = new Jadwal();
         Dashboard d = new Dashboard();
+        Pendaftaran p = new Pendaftaran();
         
         Content.add("dashboard", d);
         
@@ -56,6 +58,7 @@ public class AdminPage extends javax.swing.JFrame {
         Content.add("masterSiswa", sis.getPanel());
         Content.add("masterKelas", kel.getPanel());
         Content.add("masterJadwal", jad.getPanel());
+        Content.add("pendaftaran", p.getPanel());
         
         contentLayout = (CardLayout) Content.getLayout();   
 
@@ -96,6 +99,7 @@ public class AdminPage extends javax.swing.JFrame {
         mark5.setVisible(false);
         mark6.setVisible(false);
         mark7.setVisible(false);
+        mark8.setVisible(false);
         
         myPanel.setVisible(true);
     }
@@ -116,9 +120,7 @@ public class AdminPage extends javax.swing.JFrame {
         btnMenu = new MaterialButton();
         rightHeader = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        iconMenu1 = new javax.swing.JLabel();
-        btnLogout = new MaterialButton();
+        btnLogout = new components.MaterialIconButton();
         NavBrand = new javax.swing.JPanel();
         iconLadetani = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JSplitPane();
@@ -148,6 +150,9 @@ public class AdminPage extends javax.swing.JFrame {
         btnMasterJadwal = new MaterialButton();
         mark7 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
+        mark8 = new javax.swing.JPanel();
+        iconDriver2 = new javax.swing.JLabel();
+        btnMasterJadwal1 = new MaterialButton();
         Content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -170,15 +175,15 @@ public class AdminPage extends javax.swing.JFrame {
         Header.setPreferredSize(new java.awt.Dimension(700, 52));
         Header.setLayout(new java.awt.GridLayout(1, 0));
 
-        leftHeader.setBackground(new java.awt.Color(22, 43, 70));
+        leftHeader.setBackground(new java.awt.Color(42, 64, 84));
         leftHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iconMenu.setBackground(new java.awt.Color(22, 43, 70));
+        iconMenu.setBackground(new java.awt.Color(42, 64, 84));
         iconMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu_25px.png"))); // NOI18N
         leftHeader.add(iconMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 50));
 
-        btnMenu.setBackground(new java.awt.Color(22, 43, 70));
+        btnMenu.setBackground(new java.awt.Color(42, 64, 84));
         btnMenu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnMenu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -190,10 +195,10 @@ public class AdminPage extends javax.swing.JFrame {
 
         Header.add(leftHeader);
 
-        rightHeader.setBackground(new java.awt.Color(22, 43, 70));
-        rightHeader.setLayout(new java.awt.GridBagLayout());
+        rightHeader.setBackground(new java.awt.Color(42, 64, 84));
+        rightHeader.setLayout(new javax.swing.BoxLayout(rightHeader, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel2.setBackground(new java.awt.Color(22, 43, 70));
+        jPanel2.setBackground(new java.awt.Color(42, 64, 84));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -203,36 +208,27 @@ public class AdminPage extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        rightHeader.add(jPanel2, new java.awt.GridBagConstraints());
+        rightHeader.add(jPanel2);
 
-        jPanel1.setBackground(new java.awt.Color(22, 43, 70));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        iconMenu1.setBackground(new java.awt.Color(22, 43, 70));
-        iconMenu1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        iconMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shutdown_25px.png"))); // NOI18N
-        jPanel1.add(iconMenu1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 60, 50));
-
-        btnLogout.setBackground(new java.awt.Color(22, 43, 70));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnLogout.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLogout.setBackground(new java.awt.Color(42, 64, 84));
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shutdown_25px.png"))); // NOI18N
+        btnLogout.setMaximumSize(new java.awt.Dimension(110, 3224));
+        btnLogout.setPreferredSize(new java.awt.Dimension(50, 33));
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLogoutActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 60, 50));
-
-        rightHeader.add(jPanel1, new java.awt.GridBagConstraints());
+        rightHeader.add(btnLogout);
 
         Header.add(rightHeader);
 
         topPanel.setRightComponent(Header);
 
-        NavBrand.setBackground(new java.awt.Color(255, 89, 61));
+        NavBrand.setBackground(new java.awt.Color(245, 121, 0));
         NavBrand.setMaximumSize(new java.awt.Dimension(240, 32767));
         NavBrand.setPreferredSize(new java.awt.Dimension(240, 47));
         NavBrand.setLayout(null);
@@ -370,7 +366,7 @@ public class AdminPage extends javax.swing.JFrame {
         });
         Slide.add(btnMasterUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 190, 295, 50));
 
-        mark1.setBackground(new java.awt.Color(244, 103, 79));
+        mark1.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark1Layout = new javax.swing.GroupLayout(mark1);
         mark1.setLayout(mark1Layout);
@@ -385,7 +381,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         Slide.add(mark1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 5, 50));
 
-        mark2.setBackground(new java.awt.Color(244, 103, 79));
+        mark2.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark2Layout = new javax.swing.GroupLayout(mark2);
         mark2.setLayout(mark2Layout);
@@ -400,7 +396,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         Slide.add(mark2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 5, 50));
 
-        mark3.setBackground(new java.awt.Color(244, 103, 79));
+        mark3.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark3Layout = new javax.swing.GroupLayout(mark3);
         mark3.setLayout(mark3Layout);
@@ -415,7 +411,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         Slide.add(mark3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 5, 50));
 
-        mark4.setBackground(new java.awt.Color(244, 103, 79));
+        mark4.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark4Layout = new javax.swing.GroupLayout(mark4);
         mark4.setLayout(mark4Layout);
@@ -430,7 +426,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         Slide.add(mark4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 5, 50));
 
-        mark5.setBackground(new java.awt.Color(244, 103, 79));
+        mark5.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark5Layout = new javax.swing.GroupLayout(mark5);
         mark5.setLayout(mark5Layout);
@@ -445,7 +441,7 @@ public class AdminPage extends javax.swing.JFrame {
 
         Slide.add(mark5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 5, 50));
 
-        mark6.setBackground(new java.awt.Color(244, 103, 79));
+        mark6.setBackground(new java.awt.Color(255, 129, 5));
 
         javax.swing.GroupLayout mark6Layout = new javax.swing.GroupLayout(mark6);
         mark6.setLayout(mark6Layout);
@@ -476,7 +472,8 @@ public class AdminPage extends javax.swing.JFrame {
         });
         Slide.add(btnMasterJadwal, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 295, 50));
 
-        mark7.setBackground(new java.awt.Color(244, 103, 79));
+        mark7.setBackground(new java.awt.Color(255, 129, 5));
+        mark7.setPreferredSize(new java.awt.Dimension(5, 50));
 
         javax.swing.GroupLayout mark7Layout = new javax.swing.GroupLayout(mark7);
         mark7.setLayout(mark7Layout);
@@ -496,9 +493,40 @@ public class AdminPage extends javax.swing.JFrame {
         jSeparator1.setPreferredSize(new java.awt.Dimension(50, 1));
         Slide.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 300, -1));
 
+        mark8.setBackground(new java.awt.Color(255, 129, 5));
+
+        javax.swing.GroupLayout mark8Layout = new javax.swing.GroupLayout(mark8);
+        mark8.setLayout(mark8Layout);
+        mark8Layout.setHorizontalGroup(
+            mark8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+        mark8Layout.setVerticalGroup(
+            mark8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        Slide.add(mark8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, -1, 50));
+
+        iconDriver2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        iconDriver2.setForeground(new java.awt.Color(255, 255, 255));
+        iconDriver2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add_user_male_25px.png"))); // NOI18N
+        iconDriver2.setText("  Pendaftaran");
+        Slide.add(iconDriver2, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 490, 200, 50));
+
+        btnMasterJadwal1.setBackground(new java.awt.Color(42, 64, 84));
+        btnMasterJadwal1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnMasterJadwal1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnMasterJadwal1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMasterJadwal1ActionPerformed(evt);
+            }
+        });
+        Slide.add(btnMasterJadwal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 490, 295, 50));
+
         bottomPanel.setLeftComponent(Slide);
 
-        Content.setBackground(new java.awt.Color(237, 236, 235));
+        Content.setBackground(new java.awt.Color(230, 230, 230));
         Content.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 30, 30, 30));
         Content.setLayout(new java.awt.CardLayout());
         bottomPanel.setRightComponent(Content);
@@ -609,8 +637,12 @@ public class AdminPage extends javax.swing.JFrame {
         Login l = new Login();
         l.setVisible(true);
         dispose();
-        
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnMasterJadwal1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMasterJadwal1ActionPerformed
+        contentLayout.show(Content, "pendaftaran");
+        setMark(mark8);
+    }//GEN-LAST:event_btnMasterJadwal1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -663,9 +695,10 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JPanel Slide;
     private javax.swing.JSplitPane bottomPanel;
     private javax.swing.JButton btnDashboard;
-    private javax.swing.JButton btnLogout;
+    private components.MaterialIconButton btnLogout;
     private javax.swing.JButton btnMasterInstruktur;
     private javax.swing.JButton btnMasterJadwal;
+    private javax.swing.JButton btnMasterJadwal1;
     private javax.swing.JButton btnMasterKelas;
     private javax.swing.JButton btnMasterKomputer;
     private javax.swing.JButton btnMasterSiswa;
@@ -674,15 +707,14 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JLabel iconDashboard;
     private javax.swing.JLabel iconDriver;
     private javax.swing.JLabel iconDriver1;
+    private javax.swing.JLabel iconDriver2;
     private javax.swing.JLabel iconJenis;
     private javax.swing.JLabel iconKelolaUser;
     private javax.swing.JLabel iconLadetani;
     private javax.swing.JLabel iconMenu;
-    private javax.swing.JLabel iconMenu1;
     private javax.swing.JLabel iconProduk;
     private javax.swing.JLabel iconProdusen;
     private javax.swing.JLabel iconUser;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel leftHeader;
@@ -693,6 +725,7 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JPanel mark5;
     private javax.swing.JPanel mark6;
     private javax.swing.JPanel mark7;
+    private javax.swing.JPanel mark8;
     private javax.swing.JPanel rightHeader;
     private javax.swing.JLabel textNama;
     private javax.swing.JLabel textRole;

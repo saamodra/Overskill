@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
  * @author samod
  */
 public class Login extends javax.swing.JFrame {
-
     DBConnect c = new DBConnect("Overskill");
     /**
      * Creates new form Login
@@ -24,11 +23,8 @@ public class Login extends javax.swing.JFrame {
         btnRole.add(rdSiswa);
         btnRole.add(rdInstruktur);
         btnRole.add(rdPegawai);
-//        this.setResizable(false);
-        rdSiswa.setSelected(true);
-//        txtUsername.setText("ekoabd");
-//        txtPassword.setText("ekoabd");
-//        LoginUser();
+        this.setResizable(false);
+        txtPassword.putClientProperty("JTextField.placeholderText", "Password");
     }
     
     private void LoginUser() {
@@ -37,21 +33,22 @@ public class Login extends javax.swing.JFrame {
             String nama, id, role, sql;
             
             if(rdPegawai.isSelected()) {
-                sql = "SELECT * FROM TabelUser WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "'";
+                sql = "SELECT * FROM TabelUser WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
                 nama = "Nama_User";
                 id = "ID_User";
                 role = "";
             } else if(rdInstruktur.isSelected()) {
-                sql = "SELECT * FROM Instruktur WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "'";
+                sql = "SELECT * FROM Instruktur WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
                 nama = "Nama_Instruktur";
                 id = "ID_Instruktur";
                 role = "Instruktur";
             } else {
-                sql = "SELECT * FROM Siswa WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "'";
+                sql = "SELECT * FROM Siswa WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
                 nama = "Nama_Siswa";
                 id = "ID_Siswa";
                 role = "Siswa";
             }
+            
             c.result = c.stat.executeQuery(sql);
             int count = 0;
             
@@ -102,13 +99,13 @@ public class Login extends javax.swing.JFrame {
 
         btnRole = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
+        btnLogin = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        txtPassword = new javax.swing.JPasswordField();
+        txtUsername = new org.jdesktop.swingx.JXTextField();
         rdSiswa = new javax.swing.JRadioButton();
         rdInstruktur = new javax.swing.JRadioButton();
         rdPegawai = new javax.swing.JRadioButton();
-        txtUsername = new components.UITextField();
-        txtPassword = new components.UIPassField();
-        btnLogin = new components.MaterialButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -120,9 +117,33 @@ public class Login extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(980, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnLogin.setBackground(new java.awt.Color(255, 129, 5));
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 400, 90, 40));
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jLabel3.setText("Password");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 270, -1, -1));
+
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyReleased(evt);
+            }
+        });
+        jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 300, 320, 30));
+
+        txtUsername.setPrompt("Username");
+        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, 320, 30));
 
         rdSiswa.setText("Siswa");
         rdSiswa.setOpaque(false);
@@ -137,28 +158,6 @@ public class Login extends javax.swing.JFrame {
         rdPegawai.setOpaque(false);
         jPanel1.add(rdPegawai, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 350, -1, -1));
 
-        txtUsername.setBackground(new java.awt.Color(244, 244, 244));
-        txtUsername.setAe_Placeholder("Username");
-        jPanel1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, 320, -1));
-
-        txtPassword.setBackground(new java.awt.Color(244, 244, 244));
-        txtPassword.setAe_Placeholder("Password");
-        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtPasswordKeyPressed(evt);
-            }
-        });
-        jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 300, 320, -1));
-
-        btnLogin.setBackground(new java.awt.Color(0, 49, 45));
-        btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 410, 100, 40));
-
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         jLabel1.setText("Username");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 190, -1, -1));
@@ -171,6 +170,10 @@ public class Login extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordKeyReleased
 
     private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -218,7 +221,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private components.MaterialButton btnLogin;
+    private javax.swing.JButton btnLogin;
     private javax.swing.ButtonGroup btnRole;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -227,7 +230,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdInstruktur;
     private javax.swing.JRadioButton rdPegawai;
     private javax.swing.JRadioButton rdSiswa;
-    private components.UIPassField txtPassword;
-    private components.UITextField txtUsername;
+    private javax.swing.JPasswordField txtPassword;
+    private org.jdesktop.swingx.JXTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }

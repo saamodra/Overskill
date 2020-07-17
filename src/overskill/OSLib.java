@@ -7,6 +7,7 @@ package overskill;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -25,7 +26,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.JXTextField;
 import org.jdesktop.swingx.decorator.BorderHighlighter;
 
 /**
@@ -107,10 +110,26 @@ public class OSLib {
         textfield.setText(formattedNumber.replace(',', '.'));
     }
     
-    public static boolean fieldRequired(Object text, JLabel label)
+    public static boolean fieldRequired(String text, JLabel label)
     {
         boolean valid = false;
-        if (text.equals("") || text == null)
+        if (text.equals(""))
+        {
+            label.setVisible(true);
+            label.setText("Wajib diisi.");
+        }
+        else
+        {
+            label.setVisible(false);
+            valid = true;
+        }
+
+        return valid;
+    }
+    
+    public static boolean dateRequired(Object obj, JLabel label) {
+        boolean valid = false;
+        if (obj == null)
         {
             label.setVisible(true);
             label.setText("Wajib diisi.");
@@ -147,16 +166,30 @@ public class OSLib {
         return result;
     }
     
+    public static boolean comboRequired(String text, String placeholder, JLabel label) {
+        boolean valid = false;
+        if (text.equals(placeholder))
+        {
+            label.setVisible(true);
+            label.setText("Wajib diisi.");
+        }
+        else
+        {
+            label.setVisible(false);
+            valid = true;
+        }
+        
+        return valid;
+    }
+    
     public static boolean emailRequired(String emailStr, JLabel label) {
         boolean valid = false;
-        Pattern ptr = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = ptr.matcher(emailStr);
-        boolean validEmail = matcher.find();
+        boolean isValidEmail = EmailValidator.getInstance().isValid(emailStr);
         if (emailStr.equals(""))
         {
             label.setVisible(true);
             label.setText("Wajib diisi.");
-        } else if(validEmail) {
+        } else if(!isValidEmail) {
             label.setVisible(true);
             label.setText("Email tidak valid.");
         }
@@ -169,20 +202,36 @@ public class OSLib {
         return valid;
     }
     
+    public static void alphabetTextField(KeyEvent evt) {
+        if(!Character.isAlphabetic(evt.getKeyChar()) && evt.getKeyChar() != 32){
+            evt.consume();
+        }
+    }
+    
+    public static void numericMaxTextField(KeyEvent evt, int maxLength) {
+        boolean max = ((JXTextField)evt.getSource()).getText().length() >= maxLength;
+        if(!Character.isDigit(evt.getKeyChar()) || max){
+            evt.consume();
+        } 
+    }
+    
+    public static void numericTextField(KeyEvent evt) {
+        if(!Character.isDigit(evt.getKeyChar())){
+            evt.consume();
+        } 
+    }
+    
     public static void tableSettings(JXTable table) {
-        JTableHeader header = table.getTableHeader();
-        header.setOpaque(false);
-        header.setBackground(new Color(255, 89, 61));
-        header.setForeground(Color.WHITE);
-        header.setFont(table.getFont().deriveFont(Font.BOLD));
-        BorderHighlighter hl = new BorderHighlighter(
-            BorderFactory.createEmptyBorder(10, 5, 10, 5));
-        hl.setInner(true);
-        table.addHighlighter(hl);
-        table.setSelectionBackground(new Color(22, 43, 70));
+//        JTableHeader header = table.getTableHeader();
+//        header.setOpaque(false);
+//        header.setBackground(new Color(255, 89, 61));
+//        header.setForeground(Color.WHITE);
+        
+//        table.setSelectionBackground(new Color(22, 43, 70));
         table.setHorizontalScrollEnabled(true);
-        table.getColumnModel().getColumn(0).setMaxWidth(50);
+        table.getColumnModel().getColumn(0).setMaxWidth(70);
         
         table.packAll();
     }
+    
 }
