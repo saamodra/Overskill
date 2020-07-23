@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -164,7 +163,7 @@ public class Jawaban extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         txtArea5 = new javax.swing.JTextArea();
         btnKembali = new components.MaterialButton();
-        btnKembali1 = new components.MaterialButton();
+        btnKirim = new components.MaterialButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -256,12 +255,12 @@ public class Jawaban extends javax.swing.JFrame {
             }
         });
 
-        btnKembali1.setBackground(new java.awt.Color(40, 167, 69));
-        btnKembali1.setText("Kirim Jawaban");
-        btnKembali1.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
-        btnKembali1.addActionListener(new java.awt.event.ActionListener() {
+        btnKirim.setBackground(new java.awt.Color(40, 167, 69));
+        btnKirim.setText("Kirim Jawaban");
+        btnKirim.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        btnKirim.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnKembali1ActionPerformed(evt);
+                btnKirimActionPerformed(evt);
             }
         });
 
@@ -275,7 +274,7 @@ public class Jawaban extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
                         .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnKembali1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 822, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblSoal5)
@@ -315,7 +314,7 @@ public class Jawaban extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnKembali1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -334,9 +333,10 @@ public class Jawaban extends javax.swing.JFrame {
         ss.newSubmissionSiswa(ss);
     }//GEN-LAST:event_btnKembaliActionPerformed
 
-    private void btnKembali1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembali1ActionPerformed
+    private void btnKirimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKirimActionPerformed
+        
         saveData();
-    }//GEN-LAST:event_btnKembali1ActionPerformed
+    }//GEN-LAST:event_btnKirimActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,7 +376,7 @@ public class Jawaban extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelContent;
     private components.MaterialButton btnKembali;
-    private components.MaterialButton btnKembali1;
+    private components.MaterialButton btnKirim;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;

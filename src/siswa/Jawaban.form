@@ -107,7 +107,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnKembali" min="-2" pref="96" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="btnKembali1" min="-2" pref="116" max="-2" attributes="0"/>
+                              <Component id="btnKirim" min="-2" pref="116" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jScrollPane5" alignment="0" min="-2" pref="822" max="-2" attributes="0"/>
@@ -152,7 +152,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnKembali" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
-                          <Component id="btnKembali1" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="btnKirim" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -307,7 +307,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKembaliActionPerformed"/>
               </Events>
             </Component>
-            <Component class="components.MaterialButton" name="btnKembali1">
+            <Component class="components.MaterialButton" name="btnKirim">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="45" green="a7" red="28" type="rgb"/>
@@ -318,7 +318,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKembali1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKirimActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

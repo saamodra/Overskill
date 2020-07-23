@@ -134,7 +134,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         materialIconButton1 = new components.MaterialIconButton();
         NavBrand = new javax.swing.JPanel();
-        iconLadetani = new javax.swing.JLabel();
+        iconOS = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JSplitPane();
         Slide = new javax.swing.JPanel();
         iconDriver = new javax.swing.JLabel();
@@ -238,14 +238,14 @@ public class InstrukturPage extends javax.swing.JFrame {
         NavBrand.setPreferredSize(new java.awt.Dimension(240, 47));
         NavBrand.setLayout(null);
 
-        iconLadetani.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        iconLadetani.setForeground(new java.awt.Color(255, 255, 255));
-        iconLadetani.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        iconLadetani.setText("OVERSKILL");
-        iconLadetani.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        iconLadetani.setIconTextGap(10);
-        NavBrand.add(iconLadetani);
-        iconLadetani.setBounds(20, 0, 190, 50);
+        iconOS.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        iconOS.setForeground(new java.awt.Color(255, 255, 255));
+        iconOS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        iconOS.setText("OVERSKILL");
+        iconOS.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        iconOS.setIconTextGap(10);
+        NavBrand.add(iconOS);
+        iconOS.setBounds(20, 0, 190, 50);
 
         topPanel.setLeftComponent(NavBrand);
 
@@ -506,7 +506,7 @@ public class InstrukturPage extends javax.swing.JFrame {
                             size -= 4;
                             if (size == 60)
                             {
-                                iconLadetani.setText("OS");
+                                iconOS.setText("OS");
                             }
                         }
                         else 
@@ -514,7 +514,7 @@ public class InstrukturPage extends javax.swing.JFrame {
                             size += 4;
                             if (size == 300)
                             {
-                                iconLadetani.setText("Overskill");
+                                iconOS.setText("Overskill");
                             }
                         }
                         
@@ -630,8 +630,8 @@ public class InstrukturPage extends javax.swing.JFrame {
     private javax.swing.JLabel iconDriver;
     private javax.swing.JLabel iconJenis;
     private javax.swing.JLabel iconKelolaUser;
-    private javax.swing.JLabel iconLadetani;
     private javax.swing.JLabel iconMenu;
+    private javax.swing.JLabel iconOS;
     private javax.swing.JLabel iconProduk;
     private javax.swing.JLabel iconProdusen;
     private javax.swing.JLabel iconUser;

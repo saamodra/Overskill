@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -50,44 +51,16 @@ public class Feedback extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblKelas.setModel(model);
+        OSLib.tableSettings(tblKelas);
         tblKelas.removeColumn(tblKelas.getColumnModel().getColumn(1));
-//        tblKelas.removeColumn(tblKelas.getColumnModel().getColumn(2));
         tblKelas.packAll();
     }
     
     
-//    private boolean checkFeedback(String id_kelas) {
-//        boolean result = false;
-//        try 
-//        {
-//            DBConnect c = new DBConnect();
-//            
-//            c.stat = c.conn.createStatement();
-//            String sql = "SELECT * FROM Feedback WHERE ID_Kelas = '" + id_kelas + "' AND ID_Siswa='" + OSSession.getId() + "'";
-//            
-//            c.result = c.stat.executeQuery(sql);
-//            int count = 0;
-//            
-//            while(c.result.next()) {
-//                count++;
-//                
-//            }
-//            
-//            if(count > 0) {
-//                result = true;
-//            }
-//            c.stat.close();
-//            c.result.close();
-//        } 
-//        catch(SQLException e) 
-//        {
-//            System.out.println("Terjadi error saat load data jawaban "  + e);
-//        }
-//        
-//        return result;
-//    }
     
     private void loadData() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        
         try 
         {
             model.getDataVector().removeAllElements();
@@ -95,12 +68,9 @@ public class Feedback extends javax.swing.JFrame {
             
             DBConnect c = connection;
             c.stat = c.conn.createStatement();
-//            String sql = "SELECT f.ID_Kelas, k.Nama_Kelas, ISNULL(f.Rating, '-') as 'Rating', "
-//                    + "ISNULL(f.Feedback, '-') as 'Feedback', f.Tgl_Feedback FROM Feedback f "
-//                    + "JOIN Kelas k ON k.ID_Kelas = f.ID_Kelas WHERE f.ID_Siswa='"+ OSSession.getId() +"'";
-//            String sql = "SELECT * FROM Pendaftaran p JOIN Kelas k ON k.ID_Kelas = p.ID_Kelas WHERE ID_Siswa='"+ OSSession.getId() +"'";
+            
             String sql = "SELECT * FROM Feedback f JOIN Kelas k ON k.ID_Kelas = f.ID_Kelas WHERE f.ID_Siswa = '" + OSSession.getId() + "'";
-
+            System.out.println(sql);
             c.result = c.stat.executeQuery(sql);
             int no = 1;
             
@@ -111,10 +81,9 @@ public class Feedback extends javax.swing.JFrame {
                 obj[1] = r.getString("ID_Feedback");
                 obj[2] = r.getString("ID_Kelas");
                 obj[3] = r.getString("Nama_Kelas");
-                obj[4] = (r.getString("Rating").equals("") ? "-" : r.getString("Rating"));
-                obj[5] = (r.getString("Feedback").equals("") ? "-" : r.getString("Feedback"));
-//                obj[5] = "-";
-                obj[6] = (r.getString("Tgl_Feedback") == null ? "-" : r.getString("Tgl_Feedback"));
+                obj[4] = (r.getString("Rating") == null ? "-" : r.getString("Rating"));
+                obj[5] = (r.getString("Feedback") == null ? "-" : r.getString("Feedback"));
+                obj[6] = (r.getDate("Tgl_Feedback") == null ? "-" : sdf.format(r.getDate("Tgl_Feedback")));
                 obj[7] = (r.getString("Status").equals("0") ? "Belum ada feedback" : "Sudah ada feedback");
                 
                 no++;
@@ -147,10 +116,18 @@ public class Feedback extends javax.swing.JFrame {
             p.executeUpdate();
             p.close();
 
-            JOptionPane.showMessageDialog(this, "Data feedback berhasil diupdate.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Feedback berhasil dikirim.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+            loadData();
+            clearForm();
         } catch(SQLException e) {
             System.out.println("Terjadi error pada saat tambah feedback : " + e);
         }
+    }
+    
+    private void clearForm() {
+        txtFeedback.setText("");
+        txtNamaKelas.setText("");
+        txtRating.setValue(0);
     }
     
     public JPanel getPanel() {
@@ -178,17 +155,18 @@ public class Feedback extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtNamaKelas = new components.UITextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnKirim = new components.UIFlatButton();
         lblID = new javax.swing.JLabel();
         txtRating = new javax.swing.JSpinner();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtFeedback = new javax.swing.JTextArea();
+        txtNamaKelas = new org.jdesktop.swingx.JXTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtFeedback = new org.jdesktop.swingx.JXTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        Panel.setBackground(new java.awt.Color(250, 250, 250));
         Panel.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 PanelformComponentShown(evt);
@@ -198,6 +176,7 @@ public class Feedback extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 75));
+        jPanel2.setOpaque(false);
         jPanel2.setPreferredSize(new java.awt.Dimension(954, 75));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -208,12 +187,15 @@ public class Feedback extends javax.swing.JFrame {
         Panel.add(jPanel2);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        jPanel4.setOpaque(false);
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 11, 11, 11));
+        jPanel6.setOpaque(false);
         jPanel6.setLayout(new javax.swing.BoxLayout(jPanel6, javax.swing.BoxLayout.Y_AXIS));
 
         jPanel7.setMaximumSize(new java.awt.Dimension(32767, 45));
+        jPanel7.setOpaque(false);
         jPanel7.setPreferredSize(new java.awt.Dimension(280, 45));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -225,9 +207,8 @@ public class Feedback extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel10)
-                .addContainerGap(470, Short.MAX_VALUE))
+                .addGap(0, 480, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,6 +244,7 @@ public class Feedback extends javax.swing.JFrame {
         jPanel4.add(jPanel6);
 
         jPanel3.setMaximumSize(new java.awt.Dimension(350, 32767));
+        jPanel3.setOpaque(false);
         jPanel3.setPreferredSize(new java.awt.Dimension(350, 459));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -270,9 +252,6 @@ public class Feedback extends javax.swing.JFrame {
         jLabel2.setToolTipText("");
 
         jLabel3.setText("Nama Kelas");
-
-        txtNamaKelas.setAe_Placeholder("Nama Kelas");
-        txtNamaKelas.setEnabled(false);
 
         jLabel4.setText("Rating");
 
@@ -291,18 +270,18 @@ public class Feedback extends javax.swing.JFrame {
         lblID.setText("ID");
         lblID.setToolTipText("");
 
-        txtRating.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtRating.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         txtRating.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
         txtRating.setPreferredSize(new java.awt.Dimension(39, 30));
 
-        jScrollPane1.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNamaKelas.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtNamaKelas.setPrompt("Nama Kelas");
 
         txtFeedback.setColumns(20);
-        txtFeedback.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        txtFeedback.setLineWrap(true);
         txtFeedback.setRows(5);
-        txtFeedback.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(txtFeedback);
+        txtFeedback.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        txtFeedback.setPrompt("Feedback");
+        jScrollPane3.setViewportView(txtFeedback);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -310,24 +289,27 @@ public class Feedback extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblID))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNamaKelas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1)
-                            .addComponent(btnKirim, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNamaKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtRating, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(151, 151, 151)
+                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
+
+        jPanel3Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jScrollPane3, txtNamaKelas});
+
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -335,21 +317,21 @@ public class Feedback extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(lblID))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(36, 36, 36)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel3)
-                    .addComponent(txtNamaKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNamaKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel4)
-                    .addComponent(txtRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtRating, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
                 .addComponent(btnKirim, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         jPanel4.add(jPanel3);
@@ -381,7 +363,16 @@ public class Feedback extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnKirimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKirimActionPerformed
-        saveData();
+        if(txtFeedback.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Lengkapi feedback terlebih dahulu.", "Information",  JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin mengirim feedback ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
+            if(dialogResult == JOptionPane.YES_OPTION){
+                saveData();
+            }
+            
+        }
+        
     }//GEN-LAST:event_btnKirimActionPerformed
 
     private void PanelformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelformComponentShown
@@ -451,12 +442,12 @@ public class Feedback extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblID;
     private org.jdesktop.swingx.JXTable tblKelas;
-    private javax.swing.JTextArea txtFeedback;
-    private components.UITextField txtNamaKelas;
+    private org.jdesktop.swingx.JXTextArea txtFeedback;
+    private org.jdesktop.swingx.JXTextField txtNamaKelas;
     private javax.swing.JSpinner txtRating;
     // End of variables declaration//GEN-END:variables
 }

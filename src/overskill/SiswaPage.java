@@ -126,7 +126,7 @@ public class SiswaPage extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnLogout = new components.MaterialIconButton();
         NavBrand = new javax.swing.JPanel();
-        iconLadetani = new javax.swing.JLabel();
+        iconOverskill = new javax.swing.JLabel();
         bottomPanel = new javax.swing.JSplitPane();
         Slide = new javax.swing.JPanel();
         iconUser = new javax.swing.JLabel();
@@ -164,15 +164,15 @@ public class SiswaPage extends javax.swing.JFrame {
         Header.setPreferredSize(new java.awt.Dimension(700, 52));
         Header.setLayout(new java.awt.GridLayout(1, 0));
 
-        leftHeader.setBackground(new java.awt.Color(26, 41, 66));
+        leftHeader.setBackground(new java.awt.Color(42, 64, 84));
         leftHeader.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iconMenu.setBackground(new java.awt.Color(26, 41, 66));
+        iconMenu.setBackground(new java.awt.Color(42, 64, 84));
         iconMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         iconMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/menu_25px.png"))); // NOI18N
         leftHeader.add(iconMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 50));
 
-        btnMenu.setBackground(new java.awt.Color(26, 41, 66));
+        btnMenu.setBackground(new java.awt.Color(42, 64, 84));
         btnMenu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnMenu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -184,10 +184,10 @@ public class SiswaPage extends javax.swing.JFrame {
 
         Header.add(leftHeader);
 
-        rightHeader.setBackground(new java.awt.Color(22, 43, 70));
+        rightHeader.setBackground(new java.awt.Color(42, 64, 84));
         rightHeader.setLayout(new javax.swing.BoxLayout(rightHeader, javax.swing.BoxLayout.LINE_AXIS));
 
-        jPanel2.setBackground(new java.awt.Color(26, 41, 66));
+        jPanel2.setBackground(new java.awt.Color(42, 64, 84));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -217,19 +217,19 @@ public class SiswaPage extends javax.swing.JFrame {
 
         topPanel.setRightComponent(Header);
 
-        NavBrand.setBackground(new java.awt.Color(255, 89, 61));
+        NavBrand.setBackground(new java.awt.Color(245, 121, 0));
         NavBrand.setMaximumSize(new java.awt.Dimension(240, 32767));
         NavBrand.setPreferredSize(new java.awt.Dimension(240, 47));
         NavBrand.setLayout(null);
 
-        iconLadetani.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        iconLadetani.setForeground(new java.awt.Color(255, 255, 255));
-        iconLadetani.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        iconLadetani.setText("OVERSKILL");
-        iconLadetani.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        iconLadetani.setIconTextGap(10);
-        NavBrand.add(iconLadetani);
-        iconLadetani.setBounds(0, 0, 300, 50);
+        iconOverskill.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        iconOverskill.setForeground(new java.awt.Color(255, 255, 255));
+        iconOverskill.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        iconOverskill.setText("OVERSKILL");
+        iconOverskill.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        iconOverskill.setIconTextGap(10);
+        NavBrand.add(iconOverskill);
+        iconOverskill.setBounds(0, 0, 300, 50);
 
         topPanel.setLeftComponent(NavBrand);
 
@@ -240,7 +240,7 @@ public class SiswaPage extends javax.swing.JFrame {
         bottomPanel.setDividerSize(0);
         bottomPanel.setMinimumSize(new java.awt.Dimension(148, 60));
 
-        Slide.setBackground(new java.awt.Color(26, 41, 66));
+        Slide.setBackground(new java.awt.Color(42, 64, 84));
         Slide.setPreferredSize(new java.awt.Dimension(98, 695));
         Slide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -307,7 +307,7 @@ public class SiswaPage extends javax.swing.JFrame {
         });
         Slide.add(btnSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 190, 295, 50));
 
-        mark1.setBackground(new java.awt.Color(226, 42, 111));
+        mark1.setBackground(new java.awt.Color(245, 121, 0));
 
         javax.swing.GroupLayout mark1Layout = new javax.swing.GroupLayout(mark1);
         mark1.setLayout(mark1Layout);
@@ -322,7 +322,7 @@ public class SiswaPage extends javax.swing.JFrame {
 
         Slide.add(mark1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 140, 5, 50));
 
-        mark2.setBackground(new java.awt.Color(226, 42, 111));
+        mark2.setBackground(new java.awt.Color(245, 121, 0));
 
         javax.swing.GroupLayout mark2Layout = new javax.swing.GroupLayout(mark2);
         mark2.setLayout(mark2Layout);
@@ -337,7 +337,7 @@ public class SiswaPage extends javax.swing.JFrame {
 
         Slide.add(mark2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 5, 50));
 
-        mark3.setBackground(new java.awt.Color(226, 42, 111));
+        mark3.setBackground(new java.awt.Color(245, 121, 0));
 
         javax.swing.GroupLayout mark3Layout = new javax.swing.GroupLayout(mark3);
         mark3.setLayout(mark3Layout);
@@ -392,7 +392,7 @@ public class SiswaPage extends javax.swing.JFrame {
                             size -= 4;
                             if (size == 60)
                             {
-                                iconLadetani.setText("OS");
+                                iconOverskill.setText("OS");
                             }
                         }
                         else 
@@ -400,7 +400,7 @@ public class SiswaPage extends javax.swing.JFrame {
                             size += 4;
                             if (size == 300)
                             {
-                                iconLadetani.setText("Overskill");
+                                iconOverskill.setText("Overskill");
                             }
                         }
                         
@@ -493,8 +493,8 @@ public class SiswaPage extends javax.swing.JFrame {
     private javax.swing.JButton btnSubmission;
     private javax.swing.JLabel iconDashboard;
     private javax.swing.JLabel iconJenis;
-    private javax.swing.JLabel iconLadetani;
     private javax.swing.JLabel iconMenu;
+    private javax.swing.JLabel iconOverskill;
     private javax.swing.JLabel iconProduk;
     private javax.swing.JLabel iconUser;
     private javax.swing.JPanel jPanel2;

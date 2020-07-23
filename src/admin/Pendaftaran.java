@@ -66,7 +66,7 @@ public class Pendaftaran extends javax.swing.JFrame {
             c.result = c.stat.executeQuery(sql);
             
             cmbKelas.addItem("Pilih Kelas..");
-            id_kelas.add("");
+            id_kelas.add("Pilih Kelas..");
             harga.add(0.0);
             while(c.result.next()) {
                 ResultSet r = c.result;
@@ -121,14 +121,26 @@ public class Pendaftaran extends javax.swing.JFrame {
         int j = cmbSiswa.getSelectedIndex();
         try {
             String id_pendaftaran = OSLib.AutoNumber("Pendaftaran", "ID_Pendaftaran", "PD");
-            String query = "INSERT INTO Pendaftaran (ID_Pendaftaran, ID_Kelas, ID_Siswa, ID_User, Pembayaran) VALUES (?,?,?,?,?)";
+            String id_feedback = OSLib.AutoNumber("Feedback", "ID_Feedback", "FB");
+            
+            String queryPendaftaran = "INSERT INTO Pendaftaran (ID_Pendaftaran, ID_Kelas, ID_Siswa, ID_User, Pembayaran) VALUES (?,?,?,?,?)";
+            String queryFeedback = "INSERT INTO Feedback (ID_Feedback, ID_Kelas, ID_Siswa) VALUES (?,?,?)";
          
-            try (PreparedStatement p = connection.conn.prepareStatement(query)) {
+            
+            try (PreparedStatement p = connection.conn.prepareStatement(queryPendaftaran)) {
                 p.setString(1, id_pendaftaran);
-                p.setString(2, id_kelas.get(i+1));
+                p.setString(2, id_kelas.get(i));
                 p.setString(3, id_siswa.get(j));
                 p.setString(4, OSSession.getId());
                 p.setDouble(5, harga.get(i));
+                
+                p.executeUpdate();
+            }
+            
+            try (PreparedStatement p = connection.conn.prepareStatement(queryFeedback)) {
+                p.setString(1, id_feedback);
+                p.setString(2, id_kelas.get(i));
+                p.setString(3, id_siswa.get(j));
                 
                 p.executeUpdate();
             }

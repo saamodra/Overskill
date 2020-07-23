@@ -68,6 +68,9 @@ public class Submission_Siswa extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
+        OSLib.tableSettings(tblMaster);
+        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(1));
+        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(2));
         loadData("");
     }
     
