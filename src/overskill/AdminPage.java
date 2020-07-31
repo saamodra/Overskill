@@ -17,9 +17,10 @@ import admin.Instruktur;
 import admin.Kelas;
 import admin.Komputer;
 import admin.Siswa;
-import admin.User;
-import admin.User;
+import admin.MasterPegawai;
+import admin.MasterPegawai;
 import admin.Jadwal;
+import report.LaporanPendaftaran;
 import admin.Pendaftaran;
 
 
@@ -41,7 +42,7 @@ public class AdminPage extends javax.swing.JFrame {
         initComponents();
         
         // Mengganti nama user dengan nama akun yang sudah login.
-        User u = new User();
+        MasterPegawai u = new MasterPegawai();
         Instruktur ins = new Instruktur();
         Komputer kom = new Komputer();
         Siswa sis = new Siswa();
@@ -49,6 +50,7 @@ public class AdminPage extends javax.swing.JFrame {
         Jadwal jad = new Jadwal();
         Dashboard d = new Dashboard();
         Pendaftaran p = new Pendaftaran();
+        LaporanPendaftaran lp = new LaporanPendaftaran();
         
         Content.add("dashboard", d);
         
@@ -59,6 +61,7 @@ public class AdminPage extends javax.swing.JFrame {
         Content.add("masterKelas", kel.getPanel());
         Content.add("masterJadwal", jad.getPanel());
         Content.add("pendaftaran", p.getPanel());
+        Content.add("laporanPendaftaran", lp.getPanel());
         
         contentLayout = (CardLayout) Content.getLayout();   
 
@@ -100,6 +103,7 @@ public class AdminPage extends javax.swing.JFrame {
         mark6.setVisible(false);
         mark7.setVisible(false);
         mark8.setVisible(false);
+        mark9.setVisible(false);
         
         myPanel.setVisible(true);
     }
@@ -153,6 +157,9 @@ public class AdminPage extends javax.swing.JFrame {
         mark8 = new javax.swing.JPanel();
         iconDriver2 = new javax.swing.JLabel();
         btnMasterJadwal1 = new MaterialButton();
+        iconDriver3 = new javax.swing.JLabel();
+        mark9 = new javax.swing.JPanel();
+        btnLaporanPendaftaran = new MaterialButton();
         Content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -524,6 +531,38 @@ public class AdminPage extends javax.swing.JFrame {
         });
         Slide.add(btnMasterJadwal1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 490, 295, 50));
 
+        iconDriver3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        iconDriver3.setForeground(new java.awt.Color(255, 255, 255));
+        iconDriver3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add_user_male_25px.png"))); // NOI18N
+        iconDriver3.setText(" Laporan Pendaftaran");
+        Slide.add(iconDriver3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 540, 200, 50));
+        iconDriver3.getAccessibleContext().setAccessibleName(" Laporan Pendaftaran");
+
+        mark9.setBackground(new java.awt.Color(255, 129, 5));
+
+        javax.swing.GroupLayout mark9Layout = new javax.swing.GroupLayout(mark9);
+        mark9.setLayout(mark9Layout);
+        mark9Layout.setHorizontalGroup(
+            mark9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+        mark9Layout.setVerticalGroup(
+            mark9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        Slide.add(mark9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, -1, 50));
+
+        btnLaporanPendaftaran.setBackground(new java.awt.Color(42, 64, 84));
+        btnLaporanPendaftaran.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLaporanPendaftaran.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLaporanPendaftaran.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLaporanPendaftaranActionPerformed(evt);
+            }
+        });
+        Slide.add(btnLaporanPendaftaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 540, 295, 50));
+
         bottomPanel.setLeftComponent(Slide);
 
         Content.setBackground(new java.awt.Color(230, 230, 230));
@@ -644,6 +683,11 @@ public class AdminPage extends javax.swing.JFrame {
         setMark(mark8);
     }//GEN-LAST:event_btnMasterJadwal1ActionPerformed
 
+    private void btnLaporanPendaftaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaporanPendaftaranActionPerformed
+        contentLayout.show(Content, "laporanPendaftaran");
+        setMark(mark9);
+    }//GEN-LAST:event_btnLaporanPendaftaranActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -695,6 +739,7 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JPanel Slide;
     private javax.swing.JSplitPane bottomPanel;
     private javax.swing.JButton btnDashboard;
+    private javax.swing.JButton btnLaporanPendaftaran;
     private components.MaterialIconButton btnLogout;
     private javax.swing.JButton btnMasterInstruktur;
     private javax.swing.JButton btnMasterJadwal;
@@ -708,6 +753,7 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JLabel iconDriver;
     private javax.swing.JLabel iconDriver1;
     private javax.swing.JLabel iconDriver2;
+    private javax.swing.JLabel iconDriver3;
     private javax.swing.JLabel iconJenis;
     private javax.swing.JLabel iconKelolaUser;
     private javax.swing.JLabel iconMenu;
@@ -726,6 +772,7 @@ public class AdminPage extends javax.swing.JFrame {
     private javax.swing.JPanel mark6;
     private javax.swing.JPanel mark7;
     private javax.swing.JPanel mark8;
+    private javax.swing.JPanel mark9;
     private javax.swing.JPanel rightHeader;
     private javax.swing.JLabel textNama;
     private javax.swing.JLabel textRole;

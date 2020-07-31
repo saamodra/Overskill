@@ -82,7 +82,7 @@ public class Siswa extends javax.swing.JFrame {
                 obj[6] = r.getString("No_Telp");
                 obj[7] = r.getString("Email");
                 obj[8] = r.getString("Notelp_ortu");
-                obj[9] = r.getString("Status_Siswa");
+                obj[9] = r.getString("Status_peserta");
                 obj[10] = r.getString("Username");
                 
                 model.addRow(obj);

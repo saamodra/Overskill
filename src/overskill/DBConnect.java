@@ -24,8 +24,7 @@ public class DBConnect {
     public DBConnect() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://localhost:1433;"
-                    + "databaseName=Overskill;integratedSecurity=true";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=Overskill;integratedSecurity=true";
             conn = DriverManager.getConnection(url);
             stat = conn.createStatement();
         } catch(Exception e) {

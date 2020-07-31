@@ -33,9 +33,9 @@ public class Login extends javax.swing.JFrame {
             String nama, id, role, sql;
             
             if(rdPegawai.isSelected()) {
-                sql = "SELECT * FROM TabelUser WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
-                nama = "Nama_User";
-                id = "ID_User";
+                sql = "SELECT * FROM Pegawai WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
+                nama = "Nama_Pegawai";
+                id = "ID_Pegawai";
                 role = "";
             } else if(rdInstruktur.isSelected()) {
                 sql = "SELECT * FROM Instruktur WHERE Username='" + txtUsername.getText() + "' AND Password='" + txtPassword.getText() + "' AND Status='1'";
@@ -54,7 +54,7 @@ public class Login extends javax.swing.JFrame {
             
             while(c.result.next()) {
                 count++;
-                if(nama.equals("Nama_User")) {
+                if(nama.equals("Nama_Pegawai")) {
                     role = c.result.getString("Role");
                 }
                 OSSession.setId(c.result.getString(id));
@@ -74,8 +74,13 @@ public class Login extends javax.swing.JFrame {
                     SiswaPage app = new SiswaPage();
                     app.setVisible(true);
                 } else {
-                    AdminPage app = new AdminPage();
-                    app.setVisible(true);
+                    if(role.equals("1")) {
+                        AdminPage app = new AdminPage();
+                        app.setVisible(true);
+                    } else {
+                        KasirPage app = new KasirPage();
+                        app.setVisible(true);
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Username atau password salah!", "Login gagal", JOptionPane.ERROR_MESSAGE);

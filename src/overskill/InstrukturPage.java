@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import admin.Instruktur;
 import instruktur.Ins_SubmissionSiswa;
 import instruktur.Jawaban_Siswa;
+import report.LaporanQuizSiswa;
 
 
 /**
@@ -49,6 +50,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         Ins_SubmissionSiswa ss = new Ins_SubmissionSiswa(this);
         Jawaban_Siswa jwb = new  Jawaban_Siswa();
         Feedback fb = new Feedback();
+        LaporanQuizSiswa qs = new LaporanQuizSiswa();
         
         Content.add("dashboard", d);
         
@@ -58,6 +60,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         Content.add("submission_siswa", ss.getPanel());
         Content.add("jawaban_siswa", jwb.getPanel());
         Content.add("feedback", fb.getPanel());
+        Content.add("laporanQuizSiswa", qs.getPanel());
         
         contentLayout = (CardLayout) Content.getLayout();   
 
@@ -97,6 +100,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         mark4.setVisible(false);
         mark5.setVisible(false);
         mark6.setVisible(false);
+        mark7.setVisible(false);
         
         myPanel.setVisible(true);
     }
@@ -159,6 +163,9 @@ public class InstrukturPage extends javax.swing.JFrame {
         mark5 = new javax.swing.JPanel();
         mark6 = new javax.swing.JPanel();
         Separator2 = new javax.swing.JSeparator();
+        mark7 = new javax.swing.JPanel();
+        iconDriver1 = new javax.swing.JLabel();
+        btnFeedback1 = new MaterialButton();
         Content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -470,6 +477,37 @@ public class InstrukturPage extends javax.swing.JFrame {
         Separator2.setForeground(new java.awt.Color(72, 88, 102));
         Slide.add(Separator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 125, 300, 15));
 
+        mark7.setBackground(new java.awt.Color(245, 121, 0));
+
+        javax.swing.GroupLayout mark7Layout = new javax.swing.GroupLayout(mark7);
+        mark7.setLayout(mark7Layout);
+        mark7Layout.setHorizontalGroup(
+            mark7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+        mark7Layout.setVerticalGroup(
+            mark7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        Slide.add(mark7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 5, 50));
+
+        iconDriver1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconDriver1.setForeground(new java.awt.Color(255, 255, 255));
+        iconDriver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/questionnaire_25px.png"))); // NOI18N
+        iconDriver1.setText("   Laporan Quiz Siswa");
+        Slide.add(iconDriver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 440, 200, 50));
+
+        btnFeedback1.setBackground(new java.awt.Color(42, 64, 84));
+        btnFeedback1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnFeedback1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnFeedback1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFeedback1ActionPerformed(evt);
+            }
+        });
+        Slide.add(btnFeedback1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 295, 50));
+
         bottomPanel.setLeftComponent(Slide);
 
         Content.setBackground(new java.awt.Color(230, 230, 230));
@@ -580,6 +618,11 @@ public class InstrukturPage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_materialIconButton1ActionPerformed
 
+    private void btnFeedback1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedback1ActionPerformed
+        contentLayout.show(Content, "laporanQuizSiswa");
+        setMark(mark7);
+    }//GEN-LAST:event_btnFeedback1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -622,12 +665,14 @@ public class InstrukturPage extends javax.swing.JFrame {
     private javax.swing.JButton btnAbsensi;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnFeedback;
+    private javax.swing.JButton btnFeedback1;
     private javax.swing.JButton btnJawaban;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnSoal;
     private javax.swing.JButton btnSubmission;
     private javax.swing.JLabel iconDashboard;
     private javax.swing.JLabel iconDriver;
+    private javax.swing.JLabel iconDriver1;
     private javax.swing.JLabel iconJenis;
     private javax.swing.JLabel iconKelolaUser;
     private javax.swing.JLabel iconMenu;
@@ -643,6 +688,7 @@ public class InstrukturPage extends javax.swing.JFrame {
     private javax.swing.JPanel mark4;
     private javax.swing.JPanel mark5;
     private javax.swing.JPanel mark6;
+    private javax.swing.JPanel mark7;
     private components.MaterialIconButton materialIconButton1;
     private javax.swing.JPanel rightHeader;
     private javax.swing.JLabel textRole;

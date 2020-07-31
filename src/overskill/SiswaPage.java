@@ -17,7 +17,7 @@ import admin.Instruktur;
 import admin.Kelas;
 import admin.Komputer;
 import admin.Siswa;
-import admin.User;
+import admin.MasterPegawai;
 import admin.Jadwal;
 import siswa.Feedback;
 import siswa.Jawaban;
@@ -42,7 +42,7 @@ public class SiswaPage extends javax.swing.JFrame {
         initComponents();
         
         // Mengganti nama user dengan nama akun yang sudah login.
-        User u = new User();
+        MasterPegawai u = new MasterPegawai();
         Dashboard d = new Dashboard();
         Submission_Siswa ss = new Submission_Siswa(this);
         Feedback fd = new Feedback();

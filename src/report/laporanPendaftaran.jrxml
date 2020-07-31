@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="841" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0be0383a-59bf-4267-927e-c7addbd3ba18">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#CCCCCC" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<queryString>
+		<![CDATA[SELECT * FROM laporanPendaftaran]]>
+	</queryString>
+	<field name="ID_Pendaftaran" class="java.lang.String"/>
+	<field name="Pembayaran" class="java.math.BigDecimal"/>
+	<field name="Tgl_Pendaftaran" class="java.sql.Date"/>
+	<field name="Nama_Kelas" class="java.lang.String"/>
+	<field name="Nama_Siswa" class="java.lang.String"/>
+	<field name="Nama_Pegawai" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="150" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c3d0f7dd-58a5-4580-a7f5-19cb5bc7cd78" x="227" y="0" width="100" height="29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Overskill]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f7e5574-1596-4800-9105-cd1ec83db1bf" x="131" y="29" width="293" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Jl. Jati V D No. 8, Tanjung Priok, Jakarta Utara,1433]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f7e5574-1596-4800-9105-cd1ec83db1bf" x="131" y="49" width="293" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tlp. (021) 651-9555, Fax (021) 651-9821]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c808decc-9d52-47b0-9b8a-bef34f66c5b2" x="2" y="73" width="550" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="38d95054-4432-4b58-bbc6-75466c7f0a71" x="157" y="109" width="235" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="Product Sans" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Pendaftaran]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ff140ef0-80ae-4b5b-92a2-173da8c407dc" x="2" y="80" width="155" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["No. Laporan : OVK/PD/" + new SimpleDateFormat("MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEE, dd MMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="ff140ef0-80ae-4b5b-92a2-173da8c407dc" x="397" y="80" width="155" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="e8ac2337-7f2a-4b35-b3ed-fcb89f0df6a6" x="2" y="6" width="550" height="20" backcolor="#F57900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="1980723a-5c07-4f1d-9b84-60c8b6234952" style="Column header" x="0" y="7" width="33" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e73ea30e-b21d-4776-8026-1caf5732999e" style="Column header" x="33" y="7" width="124" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Kelas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b5d96b4-5b62-4dd6-ac06-675fe1677b8e" style="Column header" x="157" y="7" width="134" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Siswa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbfc9883-b4a5-4aa7-929c-581d70a59c5b" style="Column header" x="291" y="8" width="77" height="18" forecolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kasir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8d40d222-752a-4d53-9f4e-87b246f9bb22" style="Column header" x="368" y="7" width="80" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tgl. Daftar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b6d465c5-a513-4652-9b09-d9cab1b34125" style="Column header" x="448" y="7" width="104" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bayar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement uuid="3662130a-d377-4b5d-8bbd-24132046b5df" style="Row" mode="Opaque" x="0" y="0" width="555" height="18"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="f17f4e9d-7748-4dfb-b234-856e60448ca6" style="Detail" positionType="Float" x="33" y="0" width="124" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nama_Kelas}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="8b4a97d6-33cb-4c51-a4d1-0e2be4c26e43" style="Detail" positionType="Float" x="157" y="0" width="134" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nama_Siswa}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="661b9d5d-0e81-4de8-acf6-29dc4131cb94" style="Detail" positionType="Float" x="291" y="0" width="77" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Nama_Pegawai}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="d1088fe1-c7e7-412e-aa74-d1109dfa8844" x="2" y="0" width="31" height="18"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="368" y="0" width="80" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Tgl_Pendaftaran}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="Rp #,##0.00">
+					<reportElement uuid="03794630-3210-4733-b4c7-8fe6eaecbdd6" style="Detail" positionType="Float" x="448" y="0" width="104" height="18"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Pembayaran}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="9" splitType="Stretch">
+			<line>
+				<reportElement uuid="dd65ebbc-717e-4745-8119-20d58e574725" positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<frame>
+				<reportElement uuid="7eed3042-f3ea-489c-9eb9-de9b2679770f" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#D0B48E" backcolor="#F57900"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="f4cbf2ff-1b4c-436d-bc84-d45fae721b42" style="Column header" x="530" y="0" width="22" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="b7e3227b-3bc0-44ed-82a8-3c1d774edfae" style="Column header" x="433" y="0" width="109" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Halaman "+$V{PAGE_NUMBER}+" dari "]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="34dc9a1c-fd38-42e1-91bd-f7617f6edee0" x="10" y="0" width="130" height="20" forecolor="#FFFFFF"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="false" isItalic="true" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[Laporan Pendaftaran]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

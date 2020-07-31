@@ -86,8 +86,8 @@ public class FormUser extends javax.swing.JFrame {
     
     private void saveData() {
         try {
-            String id_user = OSLib.AutoNumber("TabelUser", "ID_User", "US");
-            String query = "INSERT INTO TabelUser (ID_User, Nama_User, Jenis_Kelamin, Alamat, No_telp, Email, Username, Password) VALUES (?,?,?,?,?,?,?,?)";
+            String id_user = OSLib.AutoNumber("Pegawai", "ID_Pegawai", "US");
+            String query = "INSERT INTO Pegawai (ID_Pegawai, Nama_Pegawai, Jenis_Kelamin, Alamat, No_telp, Email, Username, Password) VALUES (?,?,?,?,?,?,?,?)";
             String jenkel = "L";
             if(rdPerempuan.isSelected()) {
                 jenkel = "P";
@@ -105,10 +105,10 @@ public class FormUser extends javax.swing.JFrame {
             p.executeUpdate();
             p.close();
 
-            JOptionPane.showMessageDialog(this, "Data User berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Data Pegawai berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
             d.dispose();
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah user : " + e);
+            System.out.println("Terjadi error pada saat tambah pegawai : " + e);
         }
     }
     
@@ -118,7 +118,7 @@ public class FormUser extends javax.swing.JFrame {
         try {
             DBConnect c = connection;
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM TabelUser WHERE ID_User='" + id_user + "' AND Password='" + password + "'";
+            String sql = "SELECT * FROM Pegawai WHERE ID_Pegawai='" + id_user + "' AND Password='" + password + "'";
 
             c.result = c.stat.executeQuery(sql);
 
@@ -148,11 +148,11 @@ public class FormUser extends javax.swing.JFrame {
 
             if(txtPassword.getText().equals("")) {
                 
-                query = "UPDATE TabelUser SET Nama_User=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, Username=? "
-                    + "WHERE ID_User = ?";
+                query = "UPDATE Pegawai SET Nama_Pegawai=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, Username=? "
+                    + "WHERE ID_Pegawai = ?";
             } else {
-                query = "UPDATE TabelUser SET Nama_User=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, Username=?, Password=? "
-                    + "WHERE ID_User = ?";
+                query = "UPDATE Pegawai SET Nama_Pegawai=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, Username=?, Password=? "
+                    + "WHERE ID_Pegawai = ?";
                 updatePass = true;
             }
 
