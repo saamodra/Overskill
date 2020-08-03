@@ -6,7 +6,7 @@
 package admin;
 
 import components.HeaderRenderer;
-import admin.form.FormUser;
+import admin.form.FormPegawai;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -94,7 +94,6 @@ public class MasterPegawai extends javax.swing.JFrame {
                 obj[6] = r.getString("Email");
                 obj[7] = r.getString("Username");
                 obj[8] = (r.getInt("Role") == 1 ? "Admin" : r.getInt("Role") == 2 ? "Kasir" : "Manager");
-                
                 
                 model.addRow(obj);
             }
@@ -253,7 +252,7 @@ public class MasterPegawai extends javax.swing.JFrame {
       
         JDialog d = new JDialog(this , "Tambah User", true);  
         d.setLayout( new FlowLayout() );  
-        FormUser t = new FormUser(d);
+        FormPegawai t = new FormPegawai(d);
         d.add(t.getPanel());
         d.setResizable(false);
         d.setSize(521, 673);
@@ -271,7 +270,7 @@ public class MasterPegawai extends javax.swing.JFrame {
         if(!data[0].equals("")) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
-                int result = OSLib.deleteData("", "ID_User", data[0]);
+                int result = OSLib.deleteData("Pegawai", "ID_Pegawai", data[0]);
 
                 if(result == 1) {
                     JOptionPane.showMessageDialog(this, "Data User berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
@@ -293,7 +292,7 @@ public class MasterPegawai extends javax.swing.JFrame {
         {
             JDialog d = new JDialog(this , "Ubah User", true);  
             d.setLayout( new FlowLayout() );  
-            FormUser t = new FormUser(d, data);
+            FormPegawai t = new FormPegawai(d, data);
 
             d.add(t.getPanel());
             d.setResizable(false);

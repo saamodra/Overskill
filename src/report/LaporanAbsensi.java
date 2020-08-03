@@ -6,6 +6,10 @@
 package report;
 
 import java.awt.BorderLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import javax.swing.JPanel;
@@ -17,32 +21,35 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRViewer;
 import overskill.DBConnect;
 import overskill.OSLib;
+import overskill.OSSession;
 
 /**
  *
  * @author samod
  */
-public class LaporanPendaftaran extends javax.swing.JFrame {
+public class LaporanAbsensi extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
+    ArrayList<String> id_jadwal = new ArrayList<>();
     
     /**
      * Creates new form User
      */
-    public LaporanPendaftaran() {
+    public LaporanAbsensi() {
         initComponents();
-        OSLib.setDefaultDateFilter(tglAkhir, tglAwal, 2020);
+        loadJadwal();
     }
     
     
     private void formLoad() {
+        int i = cmbJadwal.getSelectedIndex();
+        
         HashMap<String, Object> map = new HashMap<>();
-        map.put("TglAwal", tglAwal.getDate());
-        map.put("TglAkhir", tglAkhir.getDate());
+        map.put("Jadwal", id_jadwal.get(i));
         Locale locale = new Locale("id", "ID");
         map.put( JRParameter.REPORT_LOCALE, locale );
         try {
-            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("laporanPendaftaran.jasper"), map, connection.conn);
+            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("laporanAbsensi.jasper"), map, connection.conn);
             JRViewer jr = new JRViewer(jp);
             
             pnlMaster.setLayout(new BorderLayout());
@@ -57,6 +64,37 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
 
     public JPanel getPanel() {
         return Panel;
+    }
+    
+    private void loadJadwal() {
+        SimpleDateFormat sdd = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        
+        try 
+        {
+            cmbJadwal.removeAllItems();
+            
+            DBConnect c = connection;
+            c.stat = c.conn.createStatement();
+            String sql = "SELECT j.*, k.Nama_Kelas FROM Jadwal j JOIN Kelas k ON k.ID_Kelas = j.ID_Kelas " +
+                        "WHERE ID_Jadwal IN (SELECT DISTINCT(ID_Jadwal) FROM Absensi) AND " +
+                        "k.ID_Instruktur = '" + OSSession.getId() + "' AND j.Status = '1'";
+            
+            c.result = c.stat.executeQuery(sql);
+            cmbJadwal.addItem("Pilih jadwal..");
+            id_jadwal.add("");
+            while(c.result.next()) {
+                ResultSet r = c.result;
+                id_jadwal.add(r.getString("ID_Jadwal"));
+                cmbJadwal.addItem(r.getString("Nama_Kelas") + " - " + sdd.format(r.getDate("Tanggal")) + " " + sdf.format(r.getTime("Jam_Awal")));
+            }
+            c.stat.close();
+            c.result.close();
+        } 
+        catch(SQLException e) 
+        {
+            System.out.println("Terjadi error saat load data kelas "  + e);
+        }
     }
 
     /**
@@ -73,9 +111,7 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnShow = new components.MaterialButton();
-        tglAwal = new com.toedter.calendar.JDateChooser();
-        tglAkhir = new com.toedter.calendar.JDateChooser();
-        jLabel2 = new javax.swing.JLabel();
+        cmbJadwal = new javax.swing.JComboBox<>();
         pnlMaster = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,11 +131,12 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Laporan Pendaftaran");
+        jLabel1.setText("Laporan Absensi");
         jPanel2.add(jLabel1);
 
         Panel.add(jPanel2);
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 20, 0, 20));
         jPanel3.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel3.setOpaque(false);
         jPanel3.setPreferredSize(new java.awt.Dimension(954, 50));
@@ -118,36 +155,24 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
             }
         });
 
-        tglAwal.setPreferredSize(new java.awt.Dimension(91, 30));
-
-        tglAkhir.setPreferredSize(new java.awt.Dimension(91, 30));
-
-        jLabel2.setText("s.d");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addGap(8, 8, 8)
-                .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19)
+                .addComponent(cmbJadwal, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(518, Short.MAX_VALUE))
+                .addContainerGap(472, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbJadwal, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -186,15 +211,14 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
 //        formLoad();
     }//GEN-LAST:event_PanelformComponentShown
 
-    private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
-        pnlMaster.removeAll();
-        formLoad();
-        
-    }//GEN-LAST:event_btnShowActionPerformed
-
     private void btnShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnShowMouseClicked
+
+    private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
+        pnlMaster.removeAll();
+        formLoad();
+    }//GEN-LAST:event_btnShowActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,14 +237,126 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LaporanPendaftaran.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LaporanAbsensi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LaporanPendaftaran.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LaporanAbsensi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LaporanPendaftaran.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LaporanAbsensi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LaporanPendaftaran.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LaporanAbsensi.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -241,7 +377,7 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LaporanPendaftaran().setVisible(true);
+                new LaporanAbsensi().setVisible(true);
             }
         });
     }
@@ -249,12 +385,10 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel;
     private components.MaterialButton btnShow;
+    private javax.swing.JComboBox<String> cmbJadwal;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel pnlMaster;
-    private com.toedter.calendar.JDateChooser tglAkhir;
-    private com.toedter.calendar.JDateChooser tglAwal;
     // End of variables declaration//GEN-END:variables
 }

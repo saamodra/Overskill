@@ -5,14 +5,9 @@
  */
 package instruktur;
 
-import siswa.*;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
@@ -233,12 +228,7 @@ public class Feedback extends javax.swing.JFrame {
     }//GEN-LAST:event_PanelformComponentShown
 
     private void tblFeedbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblFeedbackMouseClicked
-        int i = tblFeedback.getSelectedRow();
-
-        if(i == -1) {
-            return;
-        }
-        
+       
 
     }//GEN-LAST:event_tblFeedbackMouseClicked
 

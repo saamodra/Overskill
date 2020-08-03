@@ -23,7 +23,7 @@ import overskill.OSSession;
  *
  * @author samod
  */
-public class Submission extends javax.swing.JFrame {
+public class Quiz extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     ArrayList<String> id_kelas = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Submission extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public Submission() {
+    public Quiz() {
         initComponents();
         formLoad();
     }
@@ -74,7 +74,7 @@ public class Submission extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Submission s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas "
+            String sql = "SELECT * FROM Quiz s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas "
                     + "WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
@@ -84,7 +84,7 @@ public class Submission extends javax.swing.JFrame {
                 ResultSet r = c.result;
                 Object obj[] = new Object[7];
                 obj[0] = no++;
-                obj[1] = r.getString("ID_Submission");
+                obj[1] = r.getString("ID_Quiz");
                 obj[2] = r.getString("ID_Kelas");
                 obj[3] = r.getString("Nama_Kelas");
                 obj[4] = r.getString("Judul");
@@ -98,7 +98,7 @@ public class Submission extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data instruktur "  + e);
+            System.out.println("Terjadi error saat load data quiz : "  + e);
         }
     }
     
@@ -115,6 +115,7 @@ public class Submission extends javax.swing.JFrame {
             c.result = c.stat.executeQuery(sql);
             
             cmbKelas.addItem("Pilih Kelas..");
+            id_kelas.add("Pilih Kelas..");
             while(c.result.next()) {
                 ResultSet r = c.result;
                 id_kelas.add(r.getString("ID_Kelas"));
@@ -134,8 +135,8 @@ public class Submission extends javax.swing.JFrame {
         
         java.sql.Timestamp tglDuedate = new java.sql.Timestamp(txtDueDate.getDate().getTime());
         try {
-            String id_sm = OSLib.AutoNumber("Submission", "ID_Submission", "SM");
-            String query = "INSERT INTO Submission (ID_Submission, ID_Kelas, Judul, Duedate, Deskripsi) VALUES (?,?,?,?,?)";
+            String id_sm = OSLib.AutoNumber("Quiz", "ID_Quiz", "SM");
+            String query = "INSERT INTO Quiz (ID_Quiz, ID_Kelas, Judul, Duedate, Deskripsi) VALUES (?,?,?,?,?)";
          
             try (PreparedStatement p = connection.conn.prepareStatement(query)) {
                 p.setString(1, id_sm);
@@ -147,9 +148,9 @@ public class Submission extends javax.swing.JFrame {
                 p.executeUpdate();
             }
 
-            JOptionPane.showMessageDialog(this, "Data Submission berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
+            JOptionPane.showMessageDialog(this, "Data quiz berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah jadwal : " + e);
+            System.out.println("Terjadi error pada saat tambah quiz : " + e);
         }
     }
     
@@ -159,7 +160,7 @@ public class Submission extends javax.swing.JFrame {
         java.sql.Timestamp tglDuedate = new java.sql.Timestamp(txtDueDate.getDate().getTime());
         
         try {
-            String query = "UPDATE Submission SET ID_Kelas=?, Judul=?, Duedate=?, Deskripsi=? WHERE ID_Submission=?";
+            String query = "UPDATE Quiz SET ID_Kelas=?, Judul=?, Duedate=?, Deskripsi=? WHERE ID_Quiz=?";
          
             try (PreparedStatement p = connection.conn.prepareStatement(query)) {
                 p.setString(1, id_kelas.get(i));
@@ -171,9 +172,9 @@ public class Submission extends javax.swing.JFrame {
                 p.executeUpdate();
             }
 
-            JOptionPane.showMessageDialog(this, "Data Submission berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
+            JOptionPane.showMessageDialog(this, "Data quiz berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah jadwal : " + e);
+            System.out.println("Terjadi error pada saat ubah quiz : " + e);
         }
     }
     
@@ -261,7 +262,7 @@ public class Submission extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Submission");
+        jLabel1.setText("Quiz");
         jPanel2.add(jLabel1);
 
         PanelContent.add(jPanel2);
@@ -272,7 +273,7 @@ public class Submission extends javax.swing.JFrame {
         jPanel3.setPreferredSize(new java.awt.Dimension(954, 50));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setText("Data Submission");
+        jLabel4.setText("Data Quiz");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel7.setText("Form");
@@ -286,7 +287,7 @@ public class Submission extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(211, 211, 211)
                 .addComponent(jLabel4)
-                .addContainerGap(608, Short.MAX_VALUE))
+                .addContainerGap(670, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,17 +406,6 @@ public class Submission extends javax.swing.JFrame {
 
         jPanel4.add(jPanel1);
 
-        tblMaster.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMasterMouseClicked(evt);
@@ -455,7 +445,7 @@ public class Submission extends javax.swing.JFrame {
         {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
-                OSLib.deleteData("Submission", "ID_Submission", id_submission);
+                OSLib.deleteData("Quiz", "ID_Quiz", id_submission);
                 JOptionPane.showMessageDialog(this, "Data berhasil dihapus", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
                 formLoad();
             }
@@ -523,14 +513,22 @@ public class Submission extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Submission.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Quiz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Submission.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Quiz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Submission.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Quiz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Submission.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Quiz.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -543,7 +541,7 @@ public class Submission extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Submission().setVisible(true);
+                new Quiz().setVisible(true);
             }
         });
     }

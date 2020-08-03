@@ -6,8 +6,10 @@
 package admin;
 
 import admin.form.FormKomputer;
-import admin.form.FormUser;
+import admin.form.FormPegawai;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -22,7 +24,7 @@ import overskill.OSLib;
  *
  * @author samod
  */
-public class Komputer extends javax.swing.JFrame {
+public class MasterKomputer extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     private String data[];
@@ -30,8 +32,9 @@ public class Komputer extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public Komputer() {
+    public MasterKomputer() {
         initComponents();
+        addMouseClickEventListener();
         formLoad();
     }
     
@@ -55,7 +58,10 @@ public class Komputer extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
-        OSLib.tableSettings(tblMaster);
+        tblMaster.getColumnModel().getColumn(0).setMaxWidth(50);
+        tblMaster.getColumnModel().getColumn(1).setMaxWidth(100);
+        tblMaster.getColumnModel().getColumn(3).setMinWidth(150);
+        tblMaster.getColumnModel().getColumn(3).setMaxWidth(150);
         loadData("");
     }
     
@@ -93,6 +99,22 @@ public class Komputer extends javax.swing.JFrame {
     public JPanel getPanel() {
         return Panel;
     }
+    
+    private void addMouseClickEventListener() {
+        tblMaster.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) { 
+                int i = tblMaster.getSelectedRow();
+                if(i == -1) 
+                {
+                    return;
+                }
+                data[0] = (String) model.getValueAt(i, 1);
+                data[1] = (String) model.getValueAt(i, 2);
+                data[2] = (String) model.getValueAt(i, 3);
+            } 
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,8 +133,8 @@ public class Komputer extends javax.swing.JFrame {
         btnUbah = new components.MaterialButton();
         btnHapus = new components.MaterialButton();
         pnlMaster = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblMaster = new org.jdesktop.swingx.JXTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMaster = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -194,14 +216,9 @@ public class Komputer extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMasterMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(tblMaster);
+        jScrollPane1.setViewportView(tblMaster);
 
-        pnlMaster.add(jScrollPane2);
+        pnlMaster.add(jScrollPane1);
 
         Panel.add(pnlMaster);
 
@@ -267,7 +284,7 @@ public class Komputer extends javax.swing.JFrame {
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
         if(data[0] == null) {
-            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau dihapus terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau diubah terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         } else {
             JDialog d = new JDialog(this , "Ubah Komputer", true);  
             d.setLayout( new FlowLayout() );  
@@ -290,17 +307,6 @@ public class Komputer extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahMouseClicked
 
-    private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
-        int i = tblMaster.getSelectedRow();
-        if(i == -1) 
-        {
-            return;
-        }
-        data[0] = (String) model.getValueAt(i, 1);
-        data[1] = (String) model.getValueAt(i, 2);
-        data[2] = (String) model.getValueAt(i, 3);
-    }//GEN-LAST:event_tblMasterMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -318,14 +324,18 @@ public class Komputer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Komputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKomputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Komputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKomputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Komputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKomputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Komputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKomputer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -334,7 +344,7 @@ public class Komputer extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Komputer().setVisible(true);
+                new MasterKomputer().setVisible(true);
             }
         });
     }
@@ -347,8 +357,8 @@ public class Komputer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnlMaster;
-    private org.jdesktop.swingx.JXTable tblMaster;
+    private javax.swing.JTable tblMaster;
     // End of variables declaration//GEN-END:variables
 }

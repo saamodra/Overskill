@@ -7,6 +7,8 @@ package admin;
 
 import admin.form.FormKelas;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -23,7 +25,7 @@ import overskill.OSLib;
  *
  * @author KEL15
  */
-public class Kelas extends javax.swing.JFrame {
+public class MasterKelas extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
@@ -32,8 +34,9 @@ public class Kelas extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public Kelas() {
+    public MasterKelas() {
         initComponents();
+        addMouseClickEventListener();
         formLoad();
     }
     
@@ -58,9 +61,8 @@ public class Kelas extends javax.swing.JFrame {
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
         loadData("");
-        OSLib.tableSettings(tblMaster);
+        tblMaster.getColumnModel().getColumn(0).setMaxWidth(50);
         tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(3));
-        tblMaster.packAll();
         
     }
     
@@ -102,6 +104,26 @@ public class Kelas extends javax.swing.JFrame {
     public JPanel getPanel() {
         return Panel;
     }
+    
+    private void addMouseClickEventListener() {
+        tblMaster.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) { 
+                int i = tblMaster.getSelectedRow();
+                if(i == -1) {
+                    return;
+                }
+
+                data[0] = (String) model.getValueAt(i, 1);
+                data[1] = (String) model.getValueAt(i, 2);
+                data[2] = (String) model.getValueAt(i, 3);
+                data[3] = (String) model.getValueAt(i, 4);
+                data[4] = (String) model.getValueAt(i, 5);
+                data[5] = (String) model.getValueAt(i, 6);
+                data[6] = (String) model.getValueAt(i, 7);
+            } 
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -120,8 +142,8 @@ public class Kelas extends javax.swing.JFrame {
         btnUbah = new components.MaterialButton();
         btnHapus = new components.MaterialButton();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblMaster = new org.jdesktop.swingx.JXTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblMaster = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -203,14 +225,9 @@ public class Kelas extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMasterMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblMaster);
+        jScrollPane2.setViewportView(tblMaster);
 
-        jPanel4.add(jScrollPane1);
+        jPanel4.add(jScrollPane2);
 
         Panel.add(jPanel4);
 
@@ -298,21 +315,6 @@ public class Kelas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahMouseClicked
 
-    private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
-        int i = tblMaster.getSelectedRow();
-        if(i == -1) {
-            return;
-        }
-        
-        data[0] = (String) model.getValueAt(i, 1);
-        data[1] = (String) model.getValueAt(i, 2);
-        data[2] = (String) model.getValueAt(i, 3);
-        data[3] = (String) model.getValueAt(i, 4);
-        data[4] = (String) model.getValueAt(i, 5);
-        data[5] = (String) model.getValueAt(i, 6);
-        data[6] = (String) model.getValueAt(i, 7);
-    }//GEN-LAST:event_tblMasterMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -330,14 +332,18 @@ public class Kelas extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Kelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Kelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Kelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Kelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterKelas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -346,7 +352,7 @@ public class Kelas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Kelas().setVisible(true);
+                new MasterKelas().setVisible(true);
             }
         });
     }
@@ -360,7 +366,7 @@ public class Kelas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXTable tblMaster;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblMaster;
     // End of variables declaration//GEN-END:variables
 }

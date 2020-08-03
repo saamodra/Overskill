@@ -9,7 +9,7 @@ import components.MaterialButton;
 import instruktur.Absensi;
 import instruktur.Feedback;
 import instruktur.Soal;
-import instruktur.Submission;
+import instruktur.Quiz;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
@@ -17,9 +17,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import admin.Instruktur;
-import instruktur.Ins_SubmissionSiswa;
+import admin.MasterInstruktur;
+import instruktur.Ins_QuizSiswa;
 import instruktur.Jawaban_Siswa;
+import report.LaporanAbsensi;
+import report.LaporanFeedback;
 import report.LaporanQuizSiswa;
 
 
@@ -45,12 +47,15 @@ public class InstrukturPage extends javax.swing.JFrame {
         
         Dashboard d = new Dashboard();
         Absensi absen = new Absensi();
-        Submission s = new Submission();
+        Quiz s = new Quiz();
         Soal so = new Soal();
-        Ins_SubmissionSiswa ss = new Ins_SubmissionSiswa(this);
+        Ins_QuizSiswa ss = new Ins_QuizSiswa(this);
         Jawaban_Siswa jwb = new  Jawaban_Siswa();
         Feedback fb = new Feedback();
         LaporanQuizSiswa qs = new LaporanQuizSiswa();
+        LaporanAbsensi ls = new LaporanAbsensi();
+        LaporanFeedback lf = new LaporanFeedback();
+        
         
         Content.add("dashboard", d);
         
@@ -60,7 +65,9 @@ public class InstrukturPage extends javax.swing.JFrame {
         Content.add("submission_siswa", ss.getPanel());
         Content.add("jawaban_siswa", jwb.getPanel());
         Content.add("feedback", fb.getPanel());
+        Content.add("laporanAbsensi", ls.getPanel());
         Content.add("laporanQuizSiswa", qs.getPanel());
+        Content.add("laporanFeedback", lf.getPanel());
         
         contentLayout = (CardLayout) Content.getLayout();   
 
@@ -83,7 +90,7 @@ public class InstrukturPage extends javax.swing.JFrame {
                     width = 300;
                     topPanel.setDividerLocation(width);
                     bottomPanel.setDividerLocation(width);
-                    //textRole.setText("Ladetani");
+                    
                     NavBrand.setMinimumSize(new Dimension(300, 50));
                     Slide.setMinimumSize(new Dimension(300, 50));
                     state = true;
@@ -101,6 +108,8 @@ public class InstrukturPage extends javax.swing.JFrame {
         mark5.setVisible(false);
         mark6.setVisible(false);
         mark7.setVisible(false);
+        mark8.setVisible(false);
+        mark9.setVisible(false);
         
         myPanel.setVisible(true);
     }
@@ -113,7 +122,7 @@ public class InstrukturPage extends javax.swing.JFrame {
     }
     
     public void newSubmissionSiswa(InstrukturPage ss) {
-        Ins_SubmissionSiswa sub = new Ins_SubmissionSiswa(ss);
+        Ins_QuizSiswa sub = new Ins_QuizSiswa(ss);
         Content.remove(4);
         Content.add("submission_siswa", sub.getPanel());
         contentLayout.show(Content, "submission_siswa");
@@ -165,7 +174,13 @@ public class InstrukturPage extends javax.swing.JFrame {
         Separator2 = new javax.swing.JSeparator();
         mark7 = new javax.swing.JPanel();
         iconDriver1 = new javax.swing.JLabel();
-        btnFeedback1 = new MaterialButton();
+        btnLaporanAbsensi = new MaterialButton();
+        mark8 = new javax.swing.JPanel();
+        iconDriver2 = new javax.swing.JLabel();
+        btnLaporanQuizSiswa = new MaterialButton();
+        mark9 = new javax.swing.JPanel();
+        iconDriver3 = new javax.swing.JLabel();
+        btnLaporanFeedback = new MaterialButton();
         Content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -267,13 +282,13 @@ public class InstrukturPage extends javax.swing.JFrame {
         Slide.setPreferredSize(new java.awt.Dimension(98, 695));
         Slide.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        iconDriver.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconDriver.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconDriver.setForeground(new java.awt.Color(255, 255, 255));
         iconDriver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/feedback_25px.png"))); // NOI18N
         iconDriver.setText("   Feedback");
         Slide.add(iconDriver, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 390, 200, 50));
 
-        iconKelolaUser.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconKelolaUser.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconKelolaUser.setForeground(new java.awt.Color(255, 255, 255));
         iconKelolaUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/stack_exchange_answer_25px.png"))); // NOI18N
         iconKelolaUser.setText("   Jawaban");
@@ -313,10 +328,10 @@ public class InstrukturPage extends javax.swing.JFrame {
         txtNamaUser.setText("Samodra");
         Slide.add(txtNamaUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, 20));
 
-        iconJenis.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconJenis.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconJenis.setForeground(new java.awt.Color(255, 255, 255));
         iconJenis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/submit_document_25px.png"))); // NOI18N
-        iconJenis.setText("   Submission");
+        iconJenis.setText("   Quiz");
         Slide.add(iconJenis, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 240, 200, 50));
 
         btnSubmission.setBackground(new java.awt.Color(42, 64, 84));
@@ -329,7 +344,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         });
         Slide.add(btnSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 240, 295, 50));
 
-        iconDashboard.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconDashboard.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconDashboard.setForeground(new java.awt.Color(255, 255, 255));
         iconDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dashboard_25px.png"))); // NOI18N
         iconDashboard.setText("   Dashboard");
@@ -351,7 +366,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         textRole.setText("Instruktur");
         Slide.add(textRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 20));
 
-        iconProdusen.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconProdusen.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconProdusen.setForeground(new java.awt.Color(255, 255, 255));
         iconProdusen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/questionnaire_25px.png"))); // NOI18N
         iconProdusen.setText("   Soal");
@@ -367,7 +382,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         });
         Slide.add(btnSoal, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 290, 295, 50));
 
-        iconProduk.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconProduk.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconProduk.setForeground(new java.awt.Color(255, 255, 255));
         iconProduk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/attendance_25px.png"))); // NOI18N
         iconProduk.setText("   Absensi");
@@ -492,21 +507,83 @@ public class InstrukturPage extends javax.swing.JFrame {
 
         Slide.add(mark7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 440, 5, 50));
 
-        iconDriver1.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconDriver1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconDriver1.setForeground(new java.awt.Color(255, 255, 255));
         iconDriver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/questionnaire_25px.png"))); // NOI18N
-        iconDriver1.setText("   Laporan Quiz Siswa");
+        iconDriver1.setText("   Laporan Absensi");
         Slide.add(iconDriver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 440, 200, 50));
 
-        btnFeedback1.setBackground(new java.awt.Color(42, 64, 84));
-        btnFeedback1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnFeedback1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        btnFeedback1.addActionListener(new java.awt.event.ActionListener() {
+        btnLaporanAbsensi.setBackground(new java.awt.Color(42, 64, 84));
+        btnLaporanAbsensi.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLaporanAbsensi.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLaporanAbsensi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFeedback1ActionPerformed(evt);
+                btnLaporanAbsensiActionPerformed(evt);
             }
         });
-        Slide.add(btnFeedback1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 295, 50));
+        Slide.add(btnLaporanAbsensi, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 295, 50));
+
+        mark8.setBackground(new java.awt.Color(245, 121, 0));
+
+        javax.swing.GroupLayout mark8Layout = new javax.swing.GroupLayout(mark8);
+        mark8.setLayout(mark8Layout);
+        mark8Layout.setHorizontalGroup(
+            mark8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+        mark8Layout.setVerticalGroup(
+            mark8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        Slide.add(mark8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 5, 50));
+
+        iconDriver2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        iconDriver2.setForeground(new java.awt.Color(255, 255, 255));
+        iconDriver2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/questionnaire_25px.png"))); // NOI18N
+        iconDriver2.setText("   Laporan Quiz Siswa");
+        Slide.add(iconDriver2, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 490, 200, 50));
+
+        btnLaporanQuizSiswa.setBackground(new java.awt.Color(42, 64, 84));
+        btnLaporanQuizSiswa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLaporanQuizSiswa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLaporanQuizSiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLaporanQuizSiswaActionPerformed(evt);
+            }
+        });
+        Slide.add(btnLaporanQuizSiswa, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 490, 295, 50));
+
+        mark9.setBackground(new java.awt.Color(245, 121, 0));
+
+        javax.swing.GroupLayout mark9Layout = new javax.swing.GroupLayout(mark9);
+        mark9.setLayout(mark9Layout);
+        mark9Layout.setHorizontalGroup(
+            mark9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 5, Short.MAX_VALUE)
+        );
+        mark9Layout.setVerticalGroup(
+            mark9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+
+        Slide.add(mark9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 540, 5, 50));
+
+        iconDriver3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        iconDriver3.setForeground(new java.awt.Color(255, 255, 255));
+        iconDriver3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/questionnaire_25px.png"))); // NOI18N
+        iconDriver3.setText("   Laporan Feedback");
+        Slide.add(iconDriver3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 540, 200, 50));
+
+        btnLaporanFeedback.setBackground(new java.awt.Color(42, 64, 84));
+        btnLaporanFeedback.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLaporanFeedback.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        btnLaporanFeedback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLaporanFeedbackActionPerformed(evt);
+            }
+        });
+        Slide.add(btnLaporanFeedback, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 540, 295, 50));
 
         bottomPanel.setLeftComponent(Slide);
 
@@ -618,10 +695,20 @@ public class InstrukturPage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_materialIconButton1ActionPerformed
 
-    private void btnFeedback1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFeedback1ActionPerformed
-        contentLayout.show(Content, "laporanQuizSiswa");
+    private void btnLaporanAbsensiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaporanAbsensiActionPerformed
+        contentLayout.show(Content, "laporanAbsensi");
         setMark(mark7);
-    }//GEN-LAST:event_btnFeedback1ActionPerformed
+    }//GEN-LAST:event_btnLaporanAbsensiActionPerformed
+
+    private void btnLaporanQuizSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaporanQuizSiswaActionPerformed
+        contentLayout.show(Content, "laporanQuizSiswa");
+        setMark(mark8);
+    }//GEN-LAST:event_btnLaporanQuizSiswaActionPerformed
+
+    private void btnLaporanFeedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaporanFeedbackActionPerformed
+        contentLayout.show(Content, "laporanFeedback");
+        setMark(mark9);
+    }//GEN-LAST:event_btnLaporanFeedbackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -640,14 +727,18 @@ public class InstrukturPage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -665,14 +756,18 @@ public class InstrukturPage extends javax.swing.JFrame {
     private javax.swing.JButton btnAbsensi;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnFeedback;
-    private javax.swing.JButton btnFeedback1;
     private javax.swing.JButton btnJawaban;
+    private javax.swing.JButton btnLaporanAbsensi;
+    private javax.swing.JButton btnLaporanFeedback;
+    private javax.swing.JButton btnLaporanQuizSiswa;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnSoal;
     private javax.swing.JButton btnSubmission;
     private javax.swing.JLabel iconDashboard;
     private javax.swing.JLabel iconDriver;
     private javax.swing.JLabel iconDriver1;
+    private javax.swing.JLabel iconDriver2;
+    private javax.swing.JLabel iconDriver3;
     private javax.swing.JLabel iconJenis;
     private javax.swing.JLabel iconKelolaUser;
     private javax.swing.JLabel iconMenu;
@@ -689,6 +784,8 @@ public class InstrukturPage extends javax.swing.JFrame {
     private javax.swing.JPanel mark5;
     private javax.swing.JPanel mark6;
     private javax.swing.JPanel mark7;
+    private javax.swing.JPanel mark8;
+    private javax.swing.JPanel mark9;
     private components.MaterialIconButton materialIconButton1;
     private javax.swing.JPanel rightHeader;
     private javax.swing.JLabel textRole;

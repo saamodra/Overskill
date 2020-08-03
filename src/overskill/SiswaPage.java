@@ -13,15 +13,11 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import admin.Instruktur;
-import admin.Kelas;
-import admin.Komputer;
-import admin.Siswa;
+import admin.MasterInstruktur;
 import admin.MasterPegawai;
-import admin.Jadwal;
 import siswa.Feedback;
 import siswa.Jawaban;
-import siswa.Submission_Siswa;
+import siswa.Quiz_Siswa;
 
 
 /**
@@ -44,7 +40,7 @@ public class SiswaPage extends javax.swing.JFrame {
         // Mengganti nama user dengan nama akun yang sudah login.
         MasterPegawai u = new MasterPegawai();
         Dashboard d = new Dashboard();
-        Submission_Siswa ss = new Submission_Siswa(this);
+        Quiz_Siswa ss = new Quiz_Siswa(this);
         Feedback fd = new Feedback();
         Jawaban jwb = new Jawaban();
         
@@ -101,7 +97,7 @@ public class SiswaPage extends javax.swing.JFrame {
     }
     
     public void newSubmissionSiswa(SiswaPage ss) {
-        Submission_Siswa sub = new Submission_Siswa(ss);
+        Quiz_Siswa sub = new Quiz_Siswa(ss);
         Content.remove(1);
         Content.add("submission_siswa", sub.getPanel());
         contentLayout.show(Content, "submission_siswa");
@@ -253,7 +249,7 @@ public class SiswaPage extends javax.swing.JFrame {
         textNama.setText("Samodra");
         Slide.add(textNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, 20));
 
-        iconJenis.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconJenis.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconJenis.setForeground(new java.awt.Color(255, 255, 255));
         iconJenis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/feedback_25px.png"))); // NOI18N
         iconJenis.setText("   Feedback");
@@ -269,7 +265,7 @@ public class SiswaPage extends javax.swing.JFrame {
         });
         Slide.add(btnFeedback, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 240, 295, 50));
 
-        iconDashboard.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconDashboard.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconDashboard.setForeground(new java.awt.Color(255, 255, 255));
         iconDashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/dashboard_25px.png"))); // NOI18N
         iconDashboard.setText("   Dashboard");
@@ -291,10 +287,10 @@ public class SiswaPage extends javax.swing.JFrame {
         textRole.setText("Siswa");
         Slide.add(textRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 20));
 
-        iconProduk.setFont(new java.awt.Font("Century Gothic", 0, 15)); // NOI18N
+        iconProduk.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconProduk.setForeground(new java.awt.Color(255, 255, 255));
         iconProduk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/submit_document_25px.png"))); // NOI18N
-        iconProduk.setText("   Submission");
+        iconProduk.setText("   Quiz");
         Slide.add(iconProduk, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 190, 200, 50));
 
         btnSubmission.setBackground(new java.awt.Color(42, 64, 84));
@@ -464,14 +460,18 @@ public class SiswaPage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterInstruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

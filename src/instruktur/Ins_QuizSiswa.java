@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package siswa;
+package instruktur;
 
+import siswa.*;
 import instruktur.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,30 +20,29 @@ import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
 import overskill.OSLib;
 import overskill.OSSession;
-import overskill.SiswaPage;
+import overskill.InstrukturPage;
 
 /**
  *
  * @author samod
  */
-public class Submission_Siswa extends javax.swing.JFrame {
+public class Ins_QuizSiswa extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     ArrayList<String> id_kelas = new ArrayList<>();
-    String id_submission = "";
+    String id_quiz;
     SimpleDateFormat datetimef = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-    SiswaPage sp;
+    InstrukturPage sp;
     
     /**
      * Creates new form User
-     * @param sp
      */
-    public Submission_Siswa() {
+    public Ins_QuizSiswa() {
         initComponents();
         formLoad();
     }
     
-    public Submission_Siswa(SiswaPage sp) {
+    public Ins_QuizSiswa(InstrukturPage sp) {
         initComponents();
         this.sp = sp;
         formLoad();
@@ -56,8 +56,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
 
     
     private void addColumn() {
-        
-        String colTitles[] = {"No. ", "ID Submission", "ID Kelas", "Nama Kelas", "Judul", "Duedate", "Deskripsi", "Status Submission"};
+        String colTitles[] = {"No. ", "ID SubmissionSiswa", "Nama Kelas", "Judul", "Nama_Siswa", "Nilai", "Komentar", "Terakhir_dimodifikasi"};
         boolean[] isEditable = {false,false,false,false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
             @Override
@@ -68,22 +67,21 @@ public class Submission_Siswa extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
-        OSLib.tableSettings(tblMaster);
-        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(1));
-        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(2));
         loadData("");
+        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(1));
+        OSLib.tableSettings(tblMaster);
+        
+        tblMaster.getColumnModel().getColumn(0).setMaxWidth(60);
     }
     
-    private boolean checkSubmission(String id_submission) {
+    private boolean checkQuiz(String id_quiz) {
         boolean result = false;
         try 
         {
             DBConnect c = new DBConnect();
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT s.*, ss.ID_Siswa FROM Jawaban j JOIN Submission_Siswa ss ON "
-                    + "ss.ID_SubmissionSiswa = j.ID_Submission_Siswa JOIN Soal s ON j.ID_Soal = s.ID_Soal "
-                    + "WHERE s.ID_Submission = '" + id_submission + "' AND ss.ID_Siswa = '" + OSSession.getId() + "'";
+            String sql = "SELECT * FROM Jawaban j JOIN Soal s ON j.ID_Soal = s.ID_Soal WHERE s.ID_Quiz = '" + id_quiz + "'";
             
             c.result = c.stat.executeQuery(sql);
             int count = 0;
@@ -110,14 +108,13 @@ public class Submission_Siswa extends javax.swing.JFrame {
     private void loadData(String cari) {
         try 
         {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Submission s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas WHERE "
-                    + "s.ID_Kelas IN (SELECT ID_Kelas FROM Pendaftaran WHERE ID_Siswa = '" + OSSession.getId() + "') "
-                    + "AND s.Status='1'";
+            String sql = "SELECT * FROM viewSubmissionSiswa WHERE id_instruktur = '" + OSSession.getId() + "'";
             
             c.result = c.stat.executeQuery(sql);
             int no = 1;
@@ -126,13 +123,13 @@ public class Submission_Siswa extends javax.swing.JFrame {
                 ResultSet r = c.result;
                 Object obj[] = new Object[8];
                 obj[0] = no;
-                obj[1] = r.getString("ID_Submission");
-                obj[2] = r.getString("ID_Kelas");
-                obj[3] = r.getString("Nama_Kelas");
-                obj[4] = r.getString("Judul");
-                obj[5] = datetimef.format(r.getTimestamp("Duedate"));
-                obj[6] = r.getString("Deskripsi");
-                obj[7] = (checkSubmission(r.getString("ID_Submission")) ? "Menunggu koreksi" : "Belum dikerjakan");
+                obj[1] = r.getString("ID_QuizSiswa");
+                obj[2] = r.getString("Nama_Kelas");
+                obj[3] = r.getString("Judul");
+                obj[4] = r.getString("Nama_Siswa");
+                obj[5] = r.getString("Nilai");
+                obj[6] = r.getString("Komentar");
+                obj[7] = sdf.format(r.getTimestamp("Terakhir_dimodifikasi"));
                         
                 
                 no++;
@@ -143,7 +140,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data siswa "  + e);
+            System.out.println("Terjadi error saat load data quiz siswa "  + e);
         }
     }
     
@@ -172,7 +169,6 @@ public class Submission_Siswa extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        PanelContent.setBackground(new java.awt.Color(255, 255, 255));
         PanelContent.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 PanelContentformComponentShown(evt);
@@ -187,7 +183,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Submission");
+        jLabel1.setText("Submission Siswa");
         jPanel2.add(jLabel1);
 
         PanelContent.add(jPanel2);
@@ -199,7 +195,8 @@ public class Submission_Siswa extends javax.swing.JFrame {
 
         btnTambah.setBackground(new java.awt.Color(40, 167, 69));
         btnTambah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnTambah.setText("Kerjakan");
+        btnTambah.setText("Nilai");
+        btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
@@ -213,7 +210,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(872, Short.MAX_VALUE))
+                .addContainerGap(835, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,17 +226,6 @@ public class Submission_Siswa extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 20, 20));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
-        tblMaster.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMasterMouseClicked(evt);
@@ -259,15 +245,10 @@ public class Submission_Siswa extends javax.swing.JFrame {
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         int i = tblMaster.getSelectedRow();
         
-        if(i == -1 || id_submission.equals("")) {
-            JOptionPane.showMessageDialog(this, "Silahkan pilih submission untuk dikerjakan.", "Gagal", JOptionPane.INFORMATION_MESSAGE);
+        if(i == -1) {
+            JOptionPane.showMessageDialog(sp, "Silahkan pilih quiz terlebih dahulu", "Informasi", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            if(((String)model.getValueAt(i, 7)).equals("Menunggu koreksi")) {
-                JOptionPane.showMessageDialog(this, "Submission ini sudah dikerjakan.", "Gagal", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                sp.newJawaban(sp, id_submission);
-            }
-            
+            sp.newJawaban(sp, id_quiz);
         }
         
     }//GEN-LAST:event_btnTambahActionPerformed
@@ -278,12 +259,13 @@ public class Submission_Siswa extends javax.swing.JFrame {
 
     private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
         int i = tblMaster.getSelectedRow();
-        if(i == -1) 
-        {
+        
+        if(i == -1) {
             return;
         }
         
-        id_submission = (String)model.getValueAt(i, 1);
+        id_quiz = (String) model.getValueAt(i, 1);
+        
     }//GEN-LAST:event_tblMasterMouseClicked
 
     /**
@@ -303,14 +285,126 @@ public class Submission_Siswa extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Submission_Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ins_QuizSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Submission_Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ins_QuizSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Submission_Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ins_QuizSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Submission_Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ins_QuizSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -331,7 +425,7 @@ public class Submission_Siswa extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Submission_Siswa().setVisible(true);
+                new Ins_QuizSiswa().setVisible(true);
             }
         });
     }

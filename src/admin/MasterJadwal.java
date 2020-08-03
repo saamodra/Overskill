@@ -5,10 +5,16 @@
  */
 package admin;
 
-import admin.form.FormSiswa;
+import admin.form.FormJadwal;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -18,32 +24,33 @@ import overskill.OSLib;
 
 /**
  *
- * @author samod
+ * @author KEL15
  */
-public class Siswa extends javax.swing.JFrame {
+public class MasterJadwal extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
+    NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
     private String data[];
     
     /**
-     * Creates new form User
+     * Creates new form Jadwal
      */
-    public Siswa() {
+    public MasterJadwal() {
         initComponents();
+        addMouseClickEventListener();
         formLoad();
     }
     
     
     private void formLoad() {
-        data = new String[10];
+        data = new String[7];
         addColumn();
     }
 
     
     private void addColumn() {
-        String colTitles[] = {"No.", "ID Siswa", "Nama Siswa", "Tanggal Lahir", "Jenis Kelamin", "Alamat", 
-            "No. Telp", "Email", "No. Telp Orang Tua", "Kategori Siswa" , "Username"};
-        boolean[] isEditable = {false,false,false,false,false,false,false,false,false,false,false};
+        String colTitles[] = {"No.", "ID Jadwal", "Deskripsi", "ID Kelas", "Nama Kelas", "Tanggal", "Jam Awal", "Jam Akhir", "Status Jadwal"};
+        boolean[] isEditable = {false,false,false,false,false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -53,8 +60,9 @@ public class Siswa extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
-        OSLib.tableSettings(tblMaster);
         loadData("");
+        tblMaster.removeColumn(tblMaster.getColumnModel().getColumn(3));
+        tblMaster.getColumnModel().getColumn(0).setMaxWidth(50);
     }
     
     private void loadData(String cari) {
@@ -64,26 +72,26 @@ public class Siswa extends javax.swing.JFrame {
             
             DBConnect c = connection;
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Siswa WHERE Status='1'";
-            
+            String sql = "SELECT * FROM Jadwal k JOIN Kelas i ON k.ID_Kelas = i.ID_Kelas WHERE k.Status='1' ORDER BY k.ID_Jadwal";
             
             c.result = c.stat.executeQuery(sql);
             int no = 1;
             
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat sdd = new SimpleDateFormat("dd/MM/yyyy");
+            
             while(c.result.next()) {
                 ResultSet r = c.result;
-                Object obj[] = new Object[11];
+                Object obj[] = new Object[9];
                 obj[0] = no++;
-                obj[1] = r.getString("ID_Siswa");
-                obj[2] = r.getString("Nama_Siswa");
-                obj[3] = r.getString("Tanggal_lahir");
-                obj[4] = r.getString("Jenis_Kelamin");
-                obj[5] = r.getString("Alamat");
-                obj[6] = r.getString("No_Telp");
-                obj[7] = r.getString("Email");
-                obj[8] = r.getString("Notelp_ortu");
-                obj[9] = r.getString("Status_peserta");
-                obj[10] = r.getString("Username");
+                obj[1] = r.getString("ID_Jadwal");
+                obj[2] = r.getString("Deskripsi_Jadwal");
+                obj[3] = r.getString("ID_Kelas");
+                obj[4] = r.getString("Nama_Kelas");
+                obj[5] = sdd.format(r.getDate("Tanggal"));
+                obj[6] = sdf.format(r.getTime("Jam_Awal"));
+                obj[7] = sdf.format(r.getTime("Jam_Akhir"));
+                obj[8] = (r.getInt("Status") == '0' ? "Selesai" : "Sedang Berjalan");
                 
                 model.addRow(obj);
             }
@@ -91,12 +99,32 @@ public class Siswa extends javax.swing.JFrame {
             c.stat.close();
             c.result.close();
         } catch(SQLException e) {
-            System.out.println("Terjadi error saat load data siswa "  + e);
+            System.out.println("Terjadi error saat load data jadwal "  + e);
         }
     }
     
     public JPanel getPanel() {
         return Panel;
+    }
+    
+    private void addMouseClickEventListener() {
+        tblMaster.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) { 
+                int i = tblMaster.getSelectedRow();
+        if(i == -1) {
+            return;
+        }
+        
+        data[0] = (String) model.getValueAt(i, 1);
+        data[1] = (String) model.getValueAt(i, 2);
+        data[2] = (String) model.getValueAt(i, 3);
+        data[3] = (String) model.getValueAt(i, 4);
+        data[4] = (String) model.getValueAt(i, 5);
+        data[5] = (String) model.getValueAt(i, 6);
+        data[6] = (String) model.getValueAt(i, 7);
+            } 
+        });
     }
 
     /**
@@ -117,7 +145,7 @@ public class Siswa extends javax.swing.JFrame {
         btnHapus = new components.MaterialButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblMaster = new org.jdesktop.swingx.JXTable();
+        tblMaster = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -136,7 +164,7 @@ public class Siswa extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Master Siswa");
+        jLabel1.setText("Master Jadwal");
         jPanel2.add(jLabel1);
 
         Panel.add(jPanel2);
@@ -149,7 +177,7 @@ public class Siswa extends javax.swing.JFrame {
 
         btnTambah.setBackground(new java.awt.Color(40, 167, 69));
         btnTambah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnTambah.setText("TAMBAH SISWA");
+        btnTambah.setText("TAMBAH JADWAL");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
@@ -159,7 +187,7 @@ public class Siswa extends javax.swing.JFrame {
 
         btnUbah.setBackground(new java.awt.Color(255, 193, 7));
         btnUbah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnUbah.setText("UBAH SISWA");
+        btnUbah.setText("UBAH JADWAL");
         btnUbah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnUbahMouseClicked(evt);
@@ -174,7 +202,7 @@ public class Siswa extends javax.swing.JFrame {
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
         btnHapus.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnHapus.setText("HAPUS SISWA");
+        btnHapus.setText("HAPUS JADWAL");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
@@ -199,11 +227,6 @@ public class Siswa extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMasterMouseClicked(evt);
-            }
-        });
         jScrollPane2.setViewportView(tblMaster);
 
         jPanel4.add(jScrollPane2);
@@ -235,13 +258,12 @@ public class Siswa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
-      
-        JDialog d = new JDialog(this , "Tambah Siswa", true);  
+        JDialog d = new JDialog(this , "Tambah Jadwal", true);  
         d.setLayout( new FlowLayout() );  
-        FormSiswa sis = new FormSiswa(d);
-        d.add(sis.getPanel());
+        FormJadwal jad = new FormJadwal(d);
+        d.add(jad.getPanel());
         d.setResizable(false);
-        d.setSize(856, 500);
+        d.setSize(500, 453);
         d.setLocationRelativeTo(this);
         d.setVisible(true);
         
@@ -256,15 +278,16 @@ public class Siswa extends javax.swing.JFrame {
         if(!data[0].equals("")) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
-                int result = OSLib.deleteData("Siswa", "ID_Siswa", data[0]);
-
+                int result = OSLib.deleteData("Jadwal", "ID_Jadwal", data[0]);
+            
                 if(result == 1) {
-                    JOptionPane.showMessageDialog(this, "Data Siswa berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Jadwal berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
                     formLoad();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Data Siswa gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Jadwal gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
                 }
             }
+            
         } else {
             JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau dihapus terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         }
@@ -272,17 +295,17 @@ public class Siswa extends javax.swing.JFrame {
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
         if(data[0] == null) {
-            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau dihapus terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau diubah terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         } 
         else 
         {
-            JDialog d = new JDialog(this , "Ubah Siswa", true);  
+            JDialog d = new JDialog(this , "Ubah Jadwal", true);  
             d.setLayout( new FlowLayout() );  
-            FormSiswa sis = new FormSiswa(d, data);
+            FormJadwal t = new FormJadwal(d, data);
 
-            d.add(sis.getPanel());
+            d.add(t.getPanel());
             d.setResizable(false);
-            d.setSize(856, 500);
+            d.setSize(500, 453);
             d.setLocationRelativeTo(this);
             d.setVisible(true);
 
@@ -294,24 +317,6 @@ public class Siswa extends javax.swing.JFrame {
     private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahMouseClicked
-
-    private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
-        int i = tblMaster.getSelectedRow();
-        if(i == -1) 
-        {
-            return;
-        }
-        data[0] = (String) model.getValueAt(i, 1);
-        data[1] = (String) model.getValueAt(i, 2);
-        data[2] = (String) model.getValueAt(i, 3);
-        data[3] = (String) model.getValueAt(i, 4);
-        data[4] = (String) model.getValueAt(i, 5);
-        data[5] = (String) model.getValueAt(i, 6);
-        data[6] = (String) model.getValueAt(i, 7);
-        data[7] = (String) model.getValueAt(i, 8);
-        data[8] = (String) model.getValueAt(i, 9);
-        data[9] = (String) model.getValueAt(i, 10);
-    }//GEN-LAST:event_tblMasterMouseClicked
 
     /**
      * @param args the command line arguments
@@ -330,14 +335,26 @@ public class Siswa extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterJadwal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterJadwal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterJadwal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterJadwal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -346,7 +363,7 @@ public class Siswa extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Siswa().setVisible(true);
+                new MasterJadwal().setVisible(true);
             }
         });
     }
@@ -361,6 +378,6 @@ public class Siswa extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private org.jdesktop.swingx.JXTable tblMaster;
+    private javax.swing.JTable tblMaster;
     // End of variables declaration//GEN-END:variables
 }

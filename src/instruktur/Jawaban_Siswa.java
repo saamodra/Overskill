@@ -5,18 +5,13 @@
  */
 package instruktur;
 
-import siswa.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import overskill.DBConnect;
-import overskill.OSLib;
-import overskill.OSSession;
 import overskill.InstrukturPage;
 
 /**
@@ -25,7 +20,7 @@ import overskill.InstrukturPage;
  */
 public class Jawaban_Siswa extends javax.swing.JFrame {
     DBConnect c = new DBConnect();
-    String id_submission_siswa = "";
+    String id_quiz_siswa = "";
     ArrayList<String> jawaban;
     ArrayList<String> soal;
     InstrukturPage ip;
@@ -38,20 +33,20 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
         soal = new ArrayList<>();
     }
     
-    public Jawaban_Siswa(InstrukturPage ip, String id_submission_siswa) {
+    public Jawaban_Siswa(InstrukturPage ip, String id_quiz_siswa) {
         initComponents();
         this.ip = ip;
-        this.id_submission_siswa = id_submission_siswa;
+        this.id_quiz_siswa = id_quiz_siswa;
         jawaban = new ArrayList<>();
         soal = new ArrayList<>();
-        formLoad(id_submission_siswa);
+        formLoad(id_quiz_siswa);
     }
     
-    private void formLoad(String id_submission_siswa) {
+    private void formLoad(String id_quiz_siswa) {
         try 
         {
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM viewJawaban_Siswa WHERE ID_SubmissionSiswa='" + id_submission_siswa + "'";
+            String sql = "SELECT * FROM viewJawaban_Siswa WHERE ID_QuizSiswa='" + id_quiz_siswa + "'";
             c.result = c.stat.executeQuery(sql);
             
             while(c.result.next()) {
@@ -78,7 +73,7 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data instruktur "  + e);
+            System.out.println("Terjadi error saat load data jawaban siswa "  + e);
         }
     }
     
@@ -87,18 +82,18 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
         int nilai = (int)txtNilai.getValue();
         
         try {
-            String query = "UPDATE Submission_Siswa SET Nilai=?, Komentar=? WHERE ID_SubmissionSiswa=?";
+            String query = "UPDATE Quiz_Siswa SET Nilai=?, Komentar=? WHERE ID_QuizSiswa=?";
 
             try (PreparedStatement p = c.conn.prepareStatement(query)) {
                 p.setFloat(1, nilai);
                 p.setString(2, txtKomentar.getText());
-                p.setString(3, id_submission_siswa);
+                p.setString(3, id_quiz_siswa);
                 
                 p.executeUpdate();
             }
 
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah submission siswa : " + e);
+            System.out.println("Terjadi error pada saat tambah quiz siswa : " + e);
         }
 
 
@@ -370,7 +365,7 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PanelContentformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelContentformComponentShown
-        formLoad(id_submission_siswa);
+        formLoad(id_quiz_siswa);
     }//GEN-LAST:event_PanelContentformComponentShown
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
@@ -379,7 +374,7 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
 
     private void btnNilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNilaiActionPerformed
         int nilai = (int)txtNilai.getValue();
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menilai submission ini dengan nilai " + String.valueOf(nilai) + "?",
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menilai quiz ini dengan nilai " + String.valueOf(nilai) + "?",
                 "Peringatan", JOptionPane.YES_NO_OPTION);
         if(dialogResult == JOptionPane.YES_OPTION){
             saveData();

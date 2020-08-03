@@ -13,8 +13,11 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="TglAwal" class="java.util.Date"/>
+	<parameter name="TglAkhir" class="java.util.Date"/>
 	<queryString>
-		<![CDATA[SELECT * FROM laporanPendaftaran]]>
+		<![CDATA[SELECT * FROM laporanPendaftaran
+WHERE Tgl_Pendaftaran BETWEEN $P{TglAwal} AND $P{TglAkhir}]]>
 	</queryString>
 	<field name="ID_Pendaftaran" class="java.lang.String"/>
 	<field name="Pembayaran" class="java.math.BigDecimal"/>
@@ -22,6 +25,9 @@
 	<field name="Nama_Kelas" class="java.lang.String"/>
 	<field name="Nama_Siswa" class="java.lang.String"/>
 	<field name="Nama_Pegawai" class="java.lang.String"/>
+	<variable name="Pembayaran_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Pembayaran}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -29,7 +35,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="150" splitType="Stretch">
+		<band height="178" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="c3d0f7dd-58a5-4580-a7f5-19cb5bc7cd78" x="227" y="0" width="100" height="29"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -70,6 +76,14 @@
 				<reportElement uuid="ff140ef0-80ae-4b5b-92a2-173da8c407dc" x="397" y="80" width="155" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="08680216-6814-46f0-b0b4-a0e39e675e70" x="171" y="142" width="213" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{TglAwal})
++ " - " + new SimpleDateFormat("dd/MM/yyyy").format($P{TglAkhir})]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -164,7 +178,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Tgl_Pendaftaran}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="Rp #,##0.00">
+				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
 					<reportElement uuid="03794630-3210-4733-b4c7-8fe6eaecbdd6" style="Detail" positionType="Float" x="448" y="0" width="104" height="18"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
@@ -212,4 +226,28 @@
 			</frame>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="50">
+			<rectangle>
+				<reportElement uuid="9496411d-c1e4-4651-8b7c-516e5043c3cc" x="0" y="0" width="555" height="20" backcolor="#DCDCDC"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="ef745874-1886-4764-8f21-d430f9f42bd4" x="10" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00">
+				<reportElement uuid="39dc3ab9-4386-4dff-81e7-41963f3c1d2c" x="402" y="0" width="150" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Pembayaran_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

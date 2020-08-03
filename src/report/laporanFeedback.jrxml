@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="841" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0be0383a-59bf-4267-927e-c7addbd3ba18">
-	<property name="ireport.zoom" value="1.610510000000001"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="841" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0be0383a-59bf-4267-927e-c7addbd3ba18">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
@@ -13,24 +13,21 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="TglAwal" class="java.util.Date"/>
-	<parameter name="TglAkhir" class="java.util.Date"/>
+	<parameter name="Kelas" class="java.lang.String">
+		<defaultValueExpression><![CDATA[KL001]]></defaultValueExpression>
+	</parameter>
 	<queryString>
-		<![CDATA[SELECT * FROM viewSubmissionSiswa]]>
+		<![CDATA[SELECT * FROM laporanFeedback WHERE ID_Kelas = $P{Kelas}]]>
 	</queryString>
-	<field name="ID_QuizSiswa" class="java.lang.String"/>
-	<field name="Nilai" class="java.lang.Double"/>
-	<field name="Komentar" class="java.lang.String"/>
-	<field name="Terakhir_dimodifikasi" class="java.sql.Timestamp"/>
-	<field name="Nama_Siswa" class="java.lang.String"/>
-	<field name="ID_Quiz" class="java.lang.String"/>
+	<field name="ID_Feedback" class="java.lang.String"/>
+	<field name="ID_Siswa" class="java.lang.String"/>
 	<field name="ID_Kelas" class="java.lang.String"/>
-	<field name="Judul" class="java.lang.String"/>
-	<field name="Duedate" class="java.sql.Timestamp"/>
-	<field name="Deskripsi" class="java.lang.String"/>
+	<field name="Feedback" class="java.lang.String"/>
+	<field name="Rating" class="java.lang.Integer"/>
+	<field name="Tgl_Feedback" class="java.sql.Date"/>
 	<field name="Status" class="java.lang.String"/>
+	<field name="Nama_Siswa" class="java.lang.String"/>
 	<field name="Nama_Kelas" class="java.lang.String"/>
-	<field name="ID_Instruktur" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -38,7 +35,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="176" splitType="Stretch">
+		<band height="178" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="c3d0f7dd-58a5-4580-a7f5-19cb5bc7cd78" x="227" y="0" width="100" height="29"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -63,17 +60,10 @@
 			<line>
 				<reportElement uuid="c808decc-9d52-47b0-9b8a-bef34f66c5b2" x="2" y="73" width="550" height="1"/>
 			</line>
-			<staticText>
-				<reportElement uuid="38d95054-4432-4b58-bbc6-75466c7f0a71" x="157" y="109" width="235" height="28"/>
-				<textElement textAlignment="Center">
-					<font fontName="Product Sans" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Laporan Quiz Siswa]]></text>
-			</staticText>
 			<textField>
 				<reportElement uuid="ff140ef0-80ae-4b5b-92a2-173da8c407dc" x="2" y="80" width="155" height="20"/>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA["No. Laporan : OVK/QZ/" + new SimpleDateFormat("MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["No. Laporan : OVK/FB/" + new SimpleDateFormat("MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEE, dd MMMM yyyy" isBlankWhenNull="true">
 				<reportElement uuid="ff140ef0-80ae-4b5b-92a2-173da8c407dc" x="397" y="80" width="155" height="20"/>
@@ -81,13 +71,19 @@
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="4158cf22-33e4-4be2-847c-bafdf52b9474" x="192" y="142" width="170" height="20"/>
+				<reportElement uuid="08680216-6814-46f0-b0b4-a0e39e675e70" x="171" y="142" width="213" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($P{TglAwal})
-+ " - " + new SimpleDateFormat("dd/MM/yyyy").format($P{TglAkhir})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Nama_Kelas}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement uuid="c9f518b3-839d-4ddd-9ef2-258f6ded21a6" x="33" y="111" width="497" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="Product Sans" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Laporan Feedback]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -110,35 +106,28 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Judul]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="3b5d96b4-5b62-4dd6-ac06-675fe1677b8e" style="Column header" x="157" y="8" width="113" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Product Sans" size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Duedate]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fbfc9883-b4a5-4aa7-929c-581d70a59c5b" style="Column header" x="270" y="8" width="138" height="18" forecolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Product Sans" size="13" isBold="true"/>
-				</textElement>
 				<text><![CDATA[Nama Siswa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8d40d222-752a-4d53-9f4e-87b246f9bb22" style="Column header" x="408" y="8" width="37" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<reportElement uuid="3b5d96b4-5b62-4dd6-ac06-675fe1677b8e" style="Column header" x="157" y="7" width="254" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nilai]]></text>
+				<text><![CDATA[Feedback]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b6d465c5-a513-4652-9b09-d9cab1b34125" style="Column header" x="445" y="8" width="107" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<reportElement uuid="fbfc9883-b4a5-4aa7-929c-581d70a59c5b" style="Column header" x="411" y="8" width="48" height="18" forecolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="13" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tgl. Kirim]]></text>
+				<text><![CDATA[Rating]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8d40d222-752a-4d53-9f4e-87b246f9bb22" style="Column header" x="459" y="7" width="93" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Product Sans" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tgl. Feedback]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -151,14 +140,21 @@
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Judul}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Nama_Siswa}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy HH:mm">
-					<reportElement uuid="8b4a97d6-33cb-4c51-a4d1-0e2be4c26e43" style="Detail" positionType="Float" x="157" y="0" width="113" height="18"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="8b4a97d6-33cb-4c51-a4d1-0e2be4c26e43" style="Detail" positionType="Float" x="157" y="0" width="254" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Duedate}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Feedback}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="661b9d5d-0e81-4de8-acf6-29dc4131cb94" style="Detail" positionType="Float" x="411" y="0" width="48" height="18"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Rating}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="d1088fe1-c7e7-412e-aa74-d1109dfa8844" x="2" y="0" width="31" height="18"/>
@@ -167,26 +163,12 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="">
-					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="408" y="0" width="37" height="18"/>
-					<textElement verticalAlignment="Middle">
+				<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy">
+					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="459" y="0" width="93" height="18"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Nilai}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy HH:mm">
-					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="445" y="0" width="107" height="18"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Terakhir_dimodifikasi}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement uuid="661b9d5d-0e81-4de8-acf6-29dc4131cb94" style="Detail" positionType="Float" x="270" y="0" width="138" height="18"/>
-					<textElement verticalAlignment="Middle">
-						<font fontName="Arial" size="11"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{Nama_Siswa}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{Tgl_Feedback}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -224,7 +206,7 @@
 					<textElement verticalAlignment="Middle">
 						<font isBold="false" isItalic="true" isUnderline="false"/>
 					</textElement>
-					<text><![CDATA[Laporan Quiz Siswa]]></text>
+					<text><![CDATA[Laporan Feedback]]></text>
 				</staticText>
 			</frame>
 		</band>

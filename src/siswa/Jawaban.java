@@ -23,7 +23,7 @@ import overskill.SiswaPage;
  */
 public class Jawaban extends javax.swing.JFrame {
     DBConnect c = new DBConnect();
-    String id_submission = "";
+    String id_quiz = "";
     ArrayList<String> id_soal;
     ArrayList<String> jawaban;
     ArrayList<String> soal;
@@ -37,21 +37,21 @@ public class Jawaban extends javax.swing.JFrame {
         soal = new ArrayList<>();
     }
     
-    public Jawaban(SiswaPage ss, String id_submission) {
+    public Jawaban(SiswaPage ss, String id_quiz) {
         initComponents();
         this.ss = ss;
-        this.id_submission = id_submission;
+        this.id_quiz = id_quiz;
         id_soal = new ArrayList<>();
         soal = new ArrayList<>();
-        formLoad(id_submission);
+        formLoad(id_quiz);
     }
     
-    private void formLoad(String id_submission) {
+    private void formLoad(String id_quiz) {
         try 
         {
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Soal s JOIN Submission sm ON sm.ID_Submission=s.ID_Submission "
-                    + "JOIN Kelas k ON k.ID_Kelas = sm.ID_Kelas WHERE s.ID_Submission='" + id_submission + "' AND s.Status='1'";
+            String sql = "SELECT * FROM Soal s JOIN Quiz sm ON sm.ID_Quiz=s.ID_Quiz "
+                    + "JOIN Kelas k ON k.ID_Kelas = sm.ID_Kelas WHERE s.ID_Quiz='" + id_quiz + "' AND s.Status='1'";
             c.result = c.stat.executeQuery(sql);
             
             while(c.result.next()) {
@@ -89,9 +89,9 @@ public class Jawaban extends javax.swing.JFrame {
         jawaban.add(txtArea5.getText());
         
         if(validate(txtArea1) && validate(txtArea2) && validate(txtArea3) && validate(txtArea4) && validate(txtArea5)) {
-            String id_ss = OSLib.AutoNumber("Submission_Siswa", "ID_SubmissionSiswa", "SS");
+            String id_ss = OSLib.AutoNumber("QuizSiswa", "ID_QuizSiswa", "SS");
             try {
-                String query = "INSERT INTO Submission_Siswa (ID_SubmissionSiswa, ID_Siswa) VALUES (?,?)";
+                String query = "INSERT INTO QuizSiswa (ID_QuizSiswa, ID_Siswa) VALUES (?,?)";
 
                 PreparedStatement p = c.conn.prepareStatement(query);
                 p.setString(1, id_ss);
@@ -101,12 +101,12 @@ public class Jawaban extends javax.swing.JFrame {
                 p.close();
 
             } catch(SQLException e) {
-                System.out.println("Terjadi error pada saat tambah submission siswa : " + e);
+                System.out.println("Terjadi error pada saat tambah quiz siswa : " + e);
             }
             
             for(int i = 0; i < 5; i++) {
                 try {
-                    String query = "INSERT INTO Jawaban (ID_Soal, ID_Submission_Siswa, Jawaban) VALUES (?,?,?)";
+                    String query = "INSERT INTO Jawaban (ID_Soal, ID_QuizSiswa, Jawaban) VALUES (?,?,?)";
 
                     PreparedStatement p = c.conn.prepareStatement(query);
                     p.setString(1, id_soal.get(i));
@@ -326,7 +326,7 @@ public class Jawaban extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PanelContentformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelContentformComponentShown
-        formLoad(id_submission);
+        formLoad(id_quiz);
     }//GEN-LAST:event_PanelContentformComponentShown
 
     private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed

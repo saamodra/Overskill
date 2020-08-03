@@ -6,12 +6,17 @@
 package report;
 
 import java.awt.BorderLayout;
+import java.util.HashMap;
+import java.util.Locale;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRViewer;
 import overskill.DBConnect;
+import overskill.OSLib;
 
 /**
  *
@@ -20,20 +25,24 @@ import overskill.DBConnect;
 public class LaporanQuizSiswa extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
-    private String data[];
     
     /**
      * Creates new form User
      */
     public LaporanQuizSiswa() {
         initComponents();
-        formLoad();
+        OSLib.setDefaultDateFilter(tglAkhir, tglAwal, 2020);
     }
     
     
     private void formLoad() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("TglAwal", tglAwal.getDate());
+        map.put("TglAkhir", tglAkhir.getDate());
+        Locale locale = new Locale("id", "ID");
+        map.put( JRParameter.REPORT_LOCALE, locale );
         try {
-            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("laporanSubmissionSiswa.jasper"), null, connection.conn);
+            JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("laporanQuizSiswa.jasper"), map, connection.conn);
             JRViewer jr = new JRViewer(jp);
             
             pnlMaster.setLayout(new BorderLayout());
@@ -41,7 +50,7 @@ public class LaporanQuizSiswa extends javax.swing.JFrame {
             pnlMaster.add(jr);
             pnlMaster.revalidate();
             
-        } catch(Exception e) {
+        } catch(JRException e) {
             System.out.println(e.toString());
         }
     }
@@ -63,7 +72,10 @@ public class LaporanQuizSiswa extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        btnUbah = new components.MaterialButton();
+        tglAwal = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        tglAkhir = new com.toedter.calendar.JDateChooser();
+        btnShow = new components.MaterialButton();
         pnlMaster = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,22 +104,53 @@ public class LaporanQuizSiswa extends javax.swing.JFrame {
         jPanel3.setMaximumSize(new java.awt.Dimension(32767, 50));
         jPanel3.setOpaque(false);
         jPanel3.setPreferredSize(new java.awt.Dimension(954, 50));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
 
-        btnUbah.setBackground(new java.awt.Color(255, 193, 7));
-        btnUbah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnUbah.setText("Cari");
-        btnUbah.addMouseListener(new java.awt.event.MouseAdapter() {
+        tglAwal.setPreferredSize(new java.awt.Dimension(91, 30));
+
+        jLabel2.setText("s.d");
+
+        tglAkhir.setPreferredSize(new java.awt.Dimension(91, 30));
+
+        btnShow.setBackground(new java.awt.Color(255, 193, 7));
+        btnShow.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        btnShow.setText("Tampilkan");
+        btnShow.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUbahMouseClicked(evt);
+                btnShowMouseClicked(evt);
             }
         });
-        btnUbah.addActionListener(new java.awt.event.ActionListener() {
+        btnShow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUbahActionPerformed(evt);
+                btnShowActionPerformed(evt);
             }
         });
-        jPanel3.add(btnUbah);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(8, 8, 8)
+                .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(490, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(tglAwal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(tglAkhir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnShow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         Panel.add(jPanel3);
 
@@ -141,17 +184,17 @@ public class LaporanQuizSiswa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void PanelformComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_PanelformComponentShown
-        formLoad();
+//        formLoad();
     }//GEN-LAST:event_PanelformComponentShown
 
-    private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        
-        
-    }//GEN-LAST:event_btnUbahActionPerformed
-
-    private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
+    private void btnShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnShowMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnUbahMouseClicked
+    }//GEN-LAST:event_btnShowMouseClicked
+
+    private void btnShowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowActionPerformed
+        pnlMaster.removeAll();
+        formLoad();
+    }//GEN-LAST:event_btnShowActionPerformed
 
     /**
      * @param args the command line arguments
@@ -221,10 +264,13 @@ public class LaporanQuizSiswa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Panel;
-    private components.MaterialButton btnUbah;
+    private components.MaterialButton btnShow;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel pnlMaster;
+    private com.toedter.calendar.JDateChooser tglAkhir;
+    private com.toedter.calendar.JDateChooser tglAwal;
     // End of variables declaration//GEN-END:variables
 }

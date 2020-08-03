@@ -332,7 +332,7 @@ public class FormKelas extends javax.swing.JFrame {
         jPanel4.add(txtPertemuan, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 95, 160, 30));
 
         txtHarga.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
-        txtHarga.setPrompt("Jumlah Pertemuan");
+        txtHarga.setPrompt("Harga");
         txtHarga.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtHargaKeyReleased(evt);

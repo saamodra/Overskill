@@ -5,8 +5,10 @@
  */
 package admin;
 
-import admin.form.FormInstruktur;
+import admin.form.FormSiswa;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JDialog;
@@ -20,7 +22,7 @@ import overskill.OSLib;
  *
  * @author samod
  */
-public class Instruktur extends javax.swing.JFrame {
+public class MasterSiswa extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     private String data[];
@@ -28,22 +30,23 @@ public class Instruktur extends javax.swing.JFrame {
     /**
      * Creates new form User
      */
-    public Instruktur() {
+    public MasterSiswa() {
         initComponents();
+        addMouseClickEventListener();
         formLoad();
     }
     
     
     private void formLoad() {
-        data = new String[9];
+        data = new String[10];
         addColumn();
     }
 
     
     private void addColumn() {
-        
-        String colTitles[] = {"No. ", "ID Instruktur", "Nama Instruktur", "Tanggal Lahir", "Jenis Kelamin", "Alamat", "No. Telp", "Email", "Pengalaman Kerja", "Username"};
-        boolean[] isEditable = {false,false,false,false,false,false,false,false,false,false};
+        String colTitles[] = {"No.", "ID Siswa", "Nama Siswa", "Tanggal Lahir", "Jenis Kelamin", "Alamat", 
+            "No. Telp", "Email", "No. Telp Orang Tua", "Kategori Siswa" , "Username"};
+        boolean[] isEditable = {false,false,false,false,false,false,false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -53,49 +56,73 @@ public class Instruktur extends javax.swing.JFrame {
         };
         // The 0 argument is number rows. 
         tblMaster.setModel(model);
+        tblMaster.getColumnModel().getColumn(0).setMaxWidth(50);
         loadData("");
-        OSLib.tableSettings(tblMaster);
     }
     
     private void loadData(String cari) {
-        try 
-        {
+        try {
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
+            
             DBConnect c = connection;
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Instruktur WHERE Status='1'";
+            String sql = "SELECT * FROM Siswa WHERE Status='1'";
+            
             
             c.result = c.stat.executeQuery(sql);
-            int no = 0;
+            int no = 1;
             
             while(c.result.next()) {
                 ResultSet r = c.result;
-                Object obj[] = new Object[10];
-                obj[0] = ++no;
-                obj[1] = r.getString("ID_Instruktur");
-                obj[2] = r.getString("Nama_Instruktur");
+                Object obj[] = new Object[11];
+                obj[0] = no++;
+                obj[1] = r.getString("ID_Siswa");
+                obj[2] = r.getString("Nama_Siswa");
                 obj[3] = r.getString("Tanggal_lahir");
                 obj[4] = r.getString("Jenis_Kelamin");
                 obj[5] = r.getString("Alamat");
-                obj[6] = r.getString("No_telp");
+                obj[6] = r.getString("No_Telp");
                 obj[7] = r.getString("Email");
-                obj[8] = r.getString("Pengalaman_kerja");
-                obj[9] = r.getString("Username");
+                obj[8] = r.getString("Notelp_ortu");
+                obj[9] = r.getString("Status_peserta");
+                obj[10] = r.getString("Username");
                 
                 model.addRow(obj);
             }
+            
             c.stat.close();
             c.result.close();
-        } 
-        catch(SQLException e) 
-        {
-            System.out.println("Terjadi error saat load data instruktur "  + e);
+        } catch(SQLException e) {
+            System.out.println("Terjadi error saat load data siswa "  + e);
         }
     }
     
     public JPanel getPanel() {
         return Panel;
+    }
+    
+    private void addMouseClickEventListener() {
+        tblMaster.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent me) { 
+                int i = tblMaster.getSelectedRow();
+                if(i == -1) 
+                {
+                    return;
+                }
+                data[0] = (String) model.getValueAt(i, 1);
+                data[1] = (String) model.getValueAt(i, 2);
+                data[2] = (String) model.getValueAt(i, 3);
+                data[3] = (String) model.getValueAt(i, 4);
+                data[4] = (String) model.getValueAt(i, 5);
+                data[5] = (String) model.getValueAt(i, 6);
+                data[6] = (String) model.getValueAt(i, 7);
+                data[7] = (String) model.getValueAt(i, 8);
+                data[8] = (String) model.getValueAt(i, 9);
+                data[9] = (String) model.getValueAt(i, 10);
+            } 
+        });
     }
 
     /**
@@ -115,8 +142,8 @@ public class Instruktur extends javax.swing.JFrame {
         btnUbah = new components.MaterialButton();
         btnHapus = new components.MaterialButton();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblMaster = new org.jdesktop.swingx.JXTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblMaster = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,7 +155,6 @@ public class Instruktur extends javax.swing.JFrame {
         });
         Panel.setLayout(new javax.swing.BoxLayout(Panel, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel2.setBackground(new java.awt.Color(250, 250, 250));
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 20, 1, 1));
         jPanel2.setMaximumSize(new java.awt.Dimension(32767, 75));
         jPanel2.setOpaque(false);
@@ -136,7 +162,7 @@ public class Instruktur extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Master instruktur");
+        jLabel1.setText("Master Siswa");
         jPanel2.add(jLabel1);
 
         Panel.add(jPanel2);
@@ -149,7 +175,7 @@ public class Instruktur extends javax.swing.JFrame {
 
         btnTambah.setBackground(new java.awt.Color(40, 167, 69));
         btnTambah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnTambah.setText("TAMBAH INSTRUKTUR");
+        btnTambah.setText("TAMBAH SISWA");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
@@ -159,7 +185,7 @@ public class Instruktur extends javax.swing.JFrame {
 
         btnUbah.setBackground(new java.awt.Color(255, 193, 7));
         btnUbah.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnUbah.setText("UBAH INSTRUKTUR");
+        btnUbah.setText("UBAH SISWA");
         btnUbah.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnUbahMouseClicked(evt);
@@ -174,7 +200,7 @@ public class Instruktur extends javax.swing.JFrame {
 
         btnHapus.setBackground(new java.awt.Color(255, 51, 51));
         btnHapus.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnHapus.setText("HAPUS INSTRUKTUR");
+        btnHapus.setText("HAPUS SISWA");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
@@ -199,14 +225,9 @@ public class Instruktur extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblMasterMouseClicked(evt);
-            }
-        });
-        jScrollPane2.setViewportView(tblMaster);
+        jScrollPane1.setViewportView(tblMaster);
 
-        jPanel4.add(jScrollPane2);
+        jPanel4.add(jScrollPane1);
 
         Panel.add(jPanel4);
 
@@ -236,10 +257,10 @@ public class Instruktur extends javax.swing.JFrame {
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
       
-        JDialog d = new JDialog(this , "Tambah Instruktur", true);  
+        JDialog d = new JDialog(this , "Tambah Siswa", true);  
         d.setLayout( new FlowLayout() );  
-        FormInstruktur ins = new FormInstruktur(d);
-        d.add(ins.getPanel());
+        FormSiswa sis = new FormSiswa(d);
+        d.add(sis.getPanel());
         d.setResizable(false);
         d.setSize(856, 500);
         d.setLocationRelativeTo(this);
@@ -256,36 +277,36 @@ public class Instruktur extends javax.swing.JFrame {
         if(!data[0].equals("")) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin menghapus data ini?", "Peringatan", JOptionPane.YES_NO_OPTION);
             if(dialogResult == JOptionPane.YES_OPTION){
-                int result = OSLib.deleteData("Instruktur", "ID_Instruktur", data[0]);
-            
+                int result = OSLib.deleteData("Siswa", "ID_Siswa", data[0]);
+
                 if(result == 1) {
-                    JOptionPane.showMessageDialog(this, "Data Instruktur berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Siswa berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
                     formLoad();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Data Instruktur gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Siswa gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
                 }
             }
-            
         } else {
             JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau dihapus terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnHapusActionPerformed
 
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
-        if(data[0] == null) 
-        {
+        if(data[0] == null) {
             JOptionPane.showMessageDialog(this, "Silahkan pilih data yang mau dihapus terlebih dahulu.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
         } 
         else 
         {
-            JDialog d = new JDialog(this , "Ubah Instruktur", true);  
+            JDialog d = new JDialog(this , "Ubah Siswa", true);  
             d.setLayout( new FlowLayout() );  
-            FormInstruktur ins = new FormInstruktur(d, data);
-            d.add(ins.getPanel());
+            FormSiswa sis = new FormSiswa(d, data);
+
+            d.add(sis.getPanel());
             d.setResizable(false);
-            d.setSize(856, 520);
+            d.setSize(856, 500);
             d.setLocationRelativeTo(this);
             d.setVisible(true);
+
             formLoad();
         }
         
@@ -294,23 +315,6 @@ public class Instruktur extends javax.swing.JFrame {
     private void btnUbahMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUbahMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUbahMouseClicked
-
-    private void tblMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMasterMouseClicked
-        int i = tblMaster.getSelectedRow();
-        if(i == -1) 
-        {
-            return;
-        }
-        data[0] = (String) model.getValueAt(i, 1);
-        data[1] = (String) model.getValueAt(i, 2);
-        data[2] = (String) model.getValueAt(i, 3);
-        data[3] = (String) model.getValueAt(i, 4);
-        data[4] = (String) model.getValueAt(i, 5);
-        data[5] = (String) model.getValueAt(i, 6);
-        data[6] = (String) model.getValueAt(i, 7);
-        data[7] = (String) model.getValueAt(i, 8);
-        data[8] = (String) model.getValueAt(i, 9);
-    }//GEN-LAST:event_tblMasterMouseClicked
 
     /**
      * @param args the command line arguments
@@ -329,14 +333,18 @@ public class Instruktur extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Instruktur.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MasterSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -345,7 +353,7 @@ public class Instruktur extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Instruktur().setVisible(true);
+                new MasterSiswa().setVisible(true);
             }
         });
     }
@@ -359,7 +367,7 @@ public class Instruktur extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
-    private org.jdesktop.swingx.JXTable tblMaster;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblMaster;
     // End of variables declaration//GEN-END:variables
 }

@@ -95,7 +95,7 @@ public class FormSiswa extends javax.swing.JFrame {
     }
     
     private void loadStatusSiswa() {
-        cmbStatusSiswa.addItem("Pilih Status Siswa ..");
+        cmbStatusSiswa.addItem("Pilih Kategori Siswa ..");
         cmbStatusSiswa.addItem("SMP");
         cmbStatusSiswa.addItem("SMA");
         cmbStatusSiswa.addItem("UMUM");
@@ -123,7 +123,7 @@ public class FormSiswa extends javax.swing.JFrame {
         try {
             String id_siswa = OSLib.AutoNumber("Siswa", "ID_Siswa", "SW");
             String query = "INSERT INTO Siswa (ID_Siswa, Nama_Siswa, Tanggal_lahir, Jenis_Kelamin, Alamat, No_telp, Email,"
-                    + "Notelp_ortu, Status_Siswa, Username, Password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                    + "Notelp_ortu, Status_peserta, Username, Password) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             String jenkel = "L";
             if(rdPerempuan.isSelected()) {
                 jenkel = "P";
@@ -190,11 +190,11 @@ public class FormSiswa extends javax.swing.JFrame {
                 
                 if(txtPassword.getText().equals("")) {
                     query = "UPDATE Siswa SET Nama_Siswa=?, Tanggal_lahir=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, "
-                        + "Notelp_ortu=?, Status_Siswa=?, Username=? "
+                        + "Notelp_ortu=?, Status_peserta=?, Username=? "
                         + "WHERE ID_Siswa = ?";
                 } else {
                     query = "UPDATE Siswa SET Nama_Siswa=?, Tanggal_lahir=?, Jenis_Kelamin=?, Alamat=?, No_telp=?, Email=?, "
-                        + "Notelp_ortu=?, Status_Siswa=?, Username=?, Password=? "
+                        + "Notelp_ortu=?, Status_peserta=?, Username=?, Password=? "
                         + "WHERE ID_Siswa = ?";
                     updatePass = true;
                 }
@@ -236,7 +236,7 @@ public class FormSiswa extends javax.swing.JFrame {
         boolean notelp = OSLib.fieldRequired(txtNoTelp.getText(), lblNoTelp);
         boolean email = OSLib.emailRequired(txtEmail.getText(), lblEmail);
         boolean noTelpOrtu = OSLib.fieldRequired(txtNoTelpOrtu.getText(), lblNoTelpOrtu);
-        boolean statusSiswa = OSLib.comboRequired(cmbStatusSiswa.getSelectedItem().toString(), "Pilih Status Siswa ..", lblStatusSiswa);
+        boolean statusSiswa = OSLib.comboRequired(cmbStatusSiswa.getSelectedItem().toString(), "Pilih Kategori Siswa ..", lblStatusSiswa);
         boolean username = OSLib.fieldRequired(txtUsername.getText(), lblUsername);
         
         if(formtype.equals("Tambah")){
@@ -521,7 +521,7 @@ public class FormSiswa extends javax.swing.JFrame {
         jPanel4.add(txtNoTelpOrtu, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 40, 240, 30));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setText("Status Siswa");
+        jLabel10.setText("Kategori Siswa");
         jLabel10.setToolTipText("");
         jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, -1, -1));
 

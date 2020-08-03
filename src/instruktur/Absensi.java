@@ -5,19 +5,16 @@
  */
 package instruktur;
 
-import java.awt.FlowLayout;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
-import overskill.OSLib;
 import overskill.OSSession;
 
 /**
@@ -150,7 +147,7 @@ public class Absensi extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data instruktur "  + e);
+            System.out.println("Terjadi error saat load data Absensi "  + e);
         }
     }    
     
@@ -161,7 +158,7 @@ public class Absensi extends javax.swing.JFrame {
             c.stat = c.conn.createStatement();
             String sql = "SELECT * FROM Absensi "
                     + "WHERE ID_Jadwal='" + id_jadwal + "' AND id_siswa='" + id_siswa + "'";
-            System.out.println(sql);
+            
             c.result = c.stat.executeQuery(sql);
             int count = 0;
             
@@ -179,14 +176,14 @@ public class Absensi extends javax.swing.JFrame {
                     p.setString(1, id_jadwal);
                     p.setString(2, id_siswa);
                     p.setNull(3, Types.INTEGER);
-                    p.setString(4, "-");
+                    p.setString(4, "0");
                     
                     p.executeUpdate();
                 }
             }
             
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah instruktur : " + e);
+            System.out.println("Terjadi error pada saat tambah siswa : " + e);
         }  
     }
     
@@ -196,12 +193,11 @@ public class Absensi extends javax.swing.JFrame {
             DBConnect c = connection;
             c.stat = c.conn.createStatement();
             String sql = "SELECT * FROM Pendaftaran p WHERE ID_Kelas = (SELECT ID_Kelas FROM Jadwal WHERE ID_Jadwal = '" + id_jadwal +"')";
-            System.out.println(sql);
+            
             c.result = c.stat.executeQuery(sql);
             
             while(c.result.next()) {
                 ResultSet r = c.result;
-                System.out.println("Perulangan");
                 addSiswa(id_jadwal, r.getString("ID_Siswa"));
             }
             c.stat.close();
@@ -209,7 +205,7 @@ public class Absensi extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data kelas "  + e);
+            System.out.println("Terjadi error saat tambah data absensi : "  + e);
         }
     }
     
@@ -705,7 +701,6 @@ public class Absensi extends javax.swing.JFrame {
         }
         
         id_jadwal = (String) modelJadwal.getValueAt(i, 0);
-        System.out.println(id_jadwal);
         addAbsensi(id_jadwal);
         loadData(id_jadwal);
     }//GEN-LAST:event_tblJadwalMouseClicked
@@ -734,7 +729,6 @@ public class Absensi extends javax.swing.JFrame {
     }//GEN-LAST:event_btnShow1ActionPerformed
 
     private void btnShow2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShow2ActionPerformed
-
         absenSiswa("2");
     }//GEN-LAST:event_btnShow2ActionPerformed
 

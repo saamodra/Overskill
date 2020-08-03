@@ -24,7 +24,7 @@ import overskill.OSSession;
 public class Soal extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
-    ArrayList<String> id_submission = new ArrayList<>();
+    ArrayList<String> id_quiz = new ArrayList<>();
     String id_soal;
     SimpleDateFormat datetimef = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     
@@ -39,7 +39,7 @@ public class Soal extends javax.swing.JFrame {
     
     private void formLoad() {
         loadData("");
-        loadSubmission();
+        loadQuiz();
         addColumn();
         hideLabel();
     }
@@ -47,7 +47,7 @@ public class Soal extends javax.swing.JFrame {
     
     private void addColumn() {
         
-        String colTitles[] = {"No. ", "ID Soal", "Nama Kelas", "Judul Submission", "Soal"};
+        String colTitles[] = {"No. ", "ID Soal", "Nama Kelas", "Judul Quiz", "Soal"};
         boolean[] isEditable = {false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
             @Override
@@ -72,7 +72,7 @@ public class Soal extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Soal s JOIN Submission sm ON s.ID_Submission = sm.ID_Submission "
+            String sql = "SELECT * FROM Soal s JOIN Quiz sm ON s.ID_Quiz = sm.ID_Quiz "
                     + "JOIN Kelas k ON k.ID_Kelas = sm.ID_Kelas WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
@@ -99,40 +99,41 @@ public class Soal extends javax.swing.JFrame {
         }
     }
     
-    private void loadSubmission() {
+    private void loadQuiz() {
         try 
         {
-            cmbSubmission.removeAllItems();
+            cmbQuiz.removeAllItems();
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Submission s JOIN Kelas k ON s.ID_Kelas = k.ID_Kelas "
+            String sql = "SELECT * FROM Quiz s JOIN Kelas k ON s.ID_Kelas = k.ID_Kelas "
                     + "WHERE k.ID_Instruktur = '" + OSSession.getId() + "' AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
-            cmbSubmission.addItem("Pilih Submission..");
+            cmbQuiz.addItem("Pilih Quiz..");
+            id_quiz.add("Pilih Quiz..");
             while(c.result.next()) {
                 ResultSet r = c.result;
-                id_submission.add(r.getString("ID_Submission"));
-                cmbSubmission.addItem(r.getString("Judul"));
+                id_quiz.add(r.getString("ID_Quiz"));
+                cmbQuiz.addItem(r.getString("Judul"));
             }
             c.stat.close();
             c.result.close();
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data submission "  + e);
+            System.out.println("Terjadi error saat load data quiz "  + e);
         }
     }
     
-    private int sumQuestion(String id_submission) {
+    private int sumQuestion(String id_quiz) {
         int count = 0;
         try 
         {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM Soal WHERE ID_Submission='"+id_submission+"'";
+            String sql = "SELECT * FROM Soal WHERE ID_Quiz='"+id_quiz+"' AND Status='1'";
             
             c.result = c.stat.executeQuery(sql);
             
@@ -144,23 +145,23 @@ public class Soal extends javax.swing.JFrame {
         } 
         catch(SQLException e) 
         {
-            System.out.println("Terjadi error saat load data submission "  + e);
+            System.out.println("Terjadi error saat load data quiz "  + e);
         }
         
         return count;
     }
     
     private void saveData() {
-        int i = cmbSubmission.getSelectedIndex();
-        int count = sumQuestion(id_submission.get(i));
+        int i = cmbQuiz.getSelectedIndex();
+        int count = sumQuestion(id_quiz.get(i));
         System.out.println(String.valueOf(count));
         if(count < 5) {
             
             try {
-                String query = "INSERT INTO Soal (ID_Submission, Soal) VALUES (?,?)";
+                String query = "INSERT INTO Soal (ID_Quiz, Soal) VALUES (?,?)";
 
                 try (PreparedStatement p = connection.conn.prepareStatement(query)) {
-                    p.setString(1, id_submission.get(i));
+                    p.setString(1, id_quiz.get(i));
                     p.setString(2, txtSoal.getText());
                     
                     p.executeUpdate();
@@ -176,14 +177,14 @@ public class Soal extends javax.swing.JFrame {
     }
     
     private void updateData() {
-        int i = cmbSubmission.getSelectedIndex();
+        int i = cmbQuiz.getSelectedIndex();
         
         
         try {
-            String query = "UPDATE Soal SET ID_Submission=?, Soal=? WHERE ID_Soal=?";
+            String query = "UPDATE Soal SET ID_Quiz=?, Soal=? WHERE ID_Soal=?";
          
             try (PreparedStatement p = connection.conn.prepareStatement(query)) {
-                p.setString(1, id_submission.get(i));
+                p.setString(1, id_quiz.get(i));
                 p.setString(2, txtSoal.getText());
                 p.setString(3, id_soal);
                 
@@ -191,7 +192,7 @@ public class Soal extends javax.swing.JFrame {
                 p.executeUpdate();
             }
 
-            JOptionPane.showMessageDialog(this, "Data Submission berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
+            JOptionPane.showMessageDialog(this, "Data Quiz berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
             System.out.println("Terjadi error pada saat tambah jadwal : " + e);
         }
@@ -199,21 +200,21 @@ public class Soal extends javax.swing.JFrame {
     
     private void ClearForm() {
         id_soal = null;
-        cmbSubmission.setSelectedItem("Pilih Submission..");
+        cmbQuiz.setSelectedItem("Pilih Quiz..");
         txtSoal.setText("");
         hideLabel();
     }
     
     private boolean validateAll() {
-        boolean submission = OSLib.comboRequired(cmbSubmission.getSelectedItem().toString(), "Pilih Submission..", lblSubmission);
+        boolean quiz = OSLib.comboRequired(cmbQuiz.getSelectedItem().toString(), "Pilih Quiz..", lblQuiz);
         boolean soal = OSLib.fieldRequired(txtSoal.getText(), lblSoal);
         
-        return soal && submission;
+        return soal && quiz;
     }
     
     private void hideLabel() {
         lblSoal.setVisible(false);
-        lblSubmission.setVisible(false);
+        lblQuiz.setVisible(false);
     }
     
     public JPanel getPanel() {
@@ -238,7 +239,7 @@ public class Soal extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        cmbSubmission = new javax.swing.JComboBox<>();
+        cmbQuiz = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         btnTambah = new components.MaterialButton();
         btnUbah = new components.MaterialButton();
@@ -246,7 +247,7 @@ public class Soal extends javax.swing.JFrame {
         btnBatal = new components.MaterialButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtSoal = new org.jdesktop.swingx.JXTextArea();
-        lblSubmission = new javax.swing.JLabel();
+        lblQuiz = new javax.swing.JLabel();
         lblSoal = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblMaster = new org.jdesktop.swingx.JXTable();
@@ -317,11 +318,11 @@ public class Soal extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(310, 449));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setText("Submission");
+        jLabel2.setText("Quiz");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        cmbSubmission.setPreferredSize(new java.awt.Dimension(56, 30));
-        jPanel1.add(cmbSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 188, -1));
+        cmbQuiz.setPreferredSize(new java.awt.Dimension(56, 30));
+        jPanel1.add(cmbQuiz, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 188, -1));
 
         jLabel3.setText("Soal");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
@@ -379,9 +380,9 @@ public class Soal extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 188, -1));
 
-        lblSubmission.setForeground(new java.awt.Color(255, 51, 51));
-        lblSubmission.setText("Wajib diisi.");
-        jPanel1.add(lblSubmission, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+        lblQuiz.setForeground(new java.awt.Color(255, 51, 51));
+        lblQuiz.setText("Wajib diisi.");
+        jPanel1.add(lblQuiz, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
         lblSoal.setForeground(new java.awt.Color(255, 51, 51));
         lblSoal.setText("Wajib diisi.");
@@ -389,17 +390,6 @@ public class Soal extends javax.swing.JFrame {
 
         jPanel4.add(jPanel1);
 
-        tblMaster.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         tblMaster.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMasterMouseClicked(evt);
@@ -477,7 +467,7 @@ public class Soal extends javax.swing.JFrame {
         }
         
         id_soal = (String)model.getValueAt(i, 1);
-        cmbSubmission.setSelectedItem((String)model.getValueAt(i, 3));
+        cmbQuiz.setSelectedItem((String)model.getValueAt(i, 3));
         txtSoal.setText((String) model.getValueAt(i, 4));
     }//GEN-LAST:event_tblMasterMouseClicked
 
@@ -537,7 +527,7 @@ public class Soal extends javax.swing.JFrame {
     private components.MaterialButton btnHapus;
     private components.MaterialButton btnTambah;
     private components.MaterialButton btnUbah;
-    private javax.swing.JComboBox<String> cmbSubmission;
+    private javax.swing.JComboBox<String> cmbQuiz;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -549,8 +539,8 @@ public class Soal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblQuiz;
     private javax.swing.JLabel lblSoal;
-    private javax.swing.JLabel lblSubmission;
     private org.jdesktop.swingx.JXTable tblMaster;
     private org.jdesktop.swingx.JXTextArea txtSoal;
     // End of variables declaration//GEN-END:variables

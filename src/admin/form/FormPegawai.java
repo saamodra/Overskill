@@ -18,7 +18,7 @@ import overskill.OSLib;
  *
  * @author samod
  */
-public class FormUser extends javax.swing.JFrame {
+public class FormPegawai extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     private JDialog d;
     private String formtype = "Tambah";
@@ -26,11 +26,11 @@ public class FormUser extends javax.swing.JFrame {
     /**
      * Creates new form TambahUser
      */
-    public FormUser() {
+    public FormPegawai() {
         initComponents();
     }
     
-    public FormUser(JDialog d) {
+    public FormPegawai(JDialog d) {
         initComponents();
         this.d = d;
         btnJenkel.add(rdLaki);
@@ -39,7 +39,7 @@ public class FormUser extends javax.swing.JFrame {
         hideLabel();
     }
     
-    public FormUser(JDialog d, String... data) {
+    public FormPegawai(JDialog d, String... data) {
         initComponents();
         this.d = d;
         
@@ -47,7 +47,7 @@ public class FormUser extends javax.swing.JFrame {
         btnJenkel.add(rdPerempuan);
         
         formtype = "Ubah";
-        lblTitle.setText("Ubah User");
+        lblTitle.setText("Ubah Pegawai");
         lblID.setText(data[0]);
         
         //Form
@@ -175,7 +175,7 @@ public class FormUser extends javax.swing.JFrame {
                 p.close();
             }
 
-            JOptionPane.showMessageDialog(this, "Data User berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Data Pegawai berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
             d.dispose();
         } catch(SQLException e) {
             System.out.println("Terjadi error pada saat ubah user : " + e);
@@ -531,14 +531,22 @@ public class FormUser extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormPegawai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -551,7 +559,7 @@ public class FormUser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormUser().setVisible(true);
+                new FormPegawai().setVisible(true);
             }
         });
     }

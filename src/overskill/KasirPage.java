@@ -13,12 +13,12 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import admin.Instruktur;
-import admin.Kelas;
-import admin.Komputer;
-import admin.Siswa;
+import admin.MasterInstruktur;
+import admin.MasterKelas;
+import admin.MasterKomputer;
+import admin.MasterSiswa;
 import admin.MasterPegawai;
-import admin.Jadwal;
+import admin.MasterJadwal;
 import report.LaporanPendaftaran;
 import admin.Pendaftaran;
 
@@ -40,10 +40,10 @@ public class KasirPage extends javax.swing.JFrame {
     {
         initComponents();
         
-        Komputer kom = new Komputer();
-        Siswa sis = new Siswa();
-        Kelas kel = new Kelas();
-        Jadwal jad = new Jadwal();
+        MasterKomputer kom = new MasterKomputer();
+        MasterSiswa sis = new MasterSiswa();
+        MasterKelas kel = new MasterKelas();
+        MasterJadwal jad = new MasterJadwal();
         Dashboard d = new Dashboard();
         Pendaftaran p = new Pendaftaran();
         LaporanPendaftaran lp = new LaporanPendaftaran();

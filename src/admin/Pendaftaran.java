@@ -6,7 +6,7 @@
 package admin;
 
 import admin.form.FormInstruktur;
-import admin.form.FormUser;
+import admin.form.FormPegawai;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

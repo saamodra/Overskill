@@ -5,6 +5,7 @@
  */
 package overskill;
 
+import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -13,7 +14,10 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -221,13 +225,20 @@ public class OSLib {
         } 
     }
     
-    public static void tableSettings(JXTable table) {
-//        JTableHeader header = table.getTableHeader();
-//        header.setOpaque(false);
-//        header.setBackground(new Color(255, 89, 61));
-//        header.setForeground(Color.WHITE);
+    public static void setDefaultDateFilter(JDateChooser tglAkhir, JDateChooser tglAwal, int year) {
         
-//        table.setSelectionBackground(new Color(22, 43, 70));
+        tglAkhir.setDate(new Date());
+        
+        java.util.Date date2;
+        try {
+            date2 = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-01-01");
+            tglAwal.setDate(date2);
+        } catch (ParseException ex) {
+            System.out.println(ex);
+        }
+    }
+    
+    public static void tableSettings(JXTable table) {
         table.setHorizontalScrollEnabled(true);
         table.getColumnModel().getColumn(0).setMaxWidth(70);
         
