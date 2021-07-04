@@ -8,7 +8,6 @@ package report;
 import java.awt.BorderLayout;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -43,10 +42,10 @@ public class LaporanFeedback extends javax.swing.JFrame {
     
     private void formLoad() {
         int i = cmbKelas.getSelectedIndex();
+        Locale locale = new Locale("id", "ID");
         
         HashMap<String, Object> map = new HashMap<>();
         map.put("Kelas", id_kelas.get(i));
-        Locale locale = new Locale("id", "ID");
         map.put( JRParameter.REPORT_LOCALE, locale );
         try {
             JasperPrint jp = JasperFillManager.fillReport(getClass().getResourceAsStream("laporanFeedback.jasper"), map, connection.conn);

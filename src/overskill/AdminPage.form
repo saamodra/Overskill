@@ -563,7 +563,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/images/male_user_25px.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="   Master User"/>
+                    <Property name="text" type="java.lang.String" value="   Master Pegawai"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">

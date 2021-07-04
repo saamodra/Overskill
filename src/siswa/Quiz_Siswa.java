@@ -52,8 +52,8 @@ public class Quiz_Siswa extends javax.swing.JFrame {
     
     private void addColumn() {
         
-        String colTitles[] = {"No. ", "ID Quiz", "ID Kelas", "Nama Kelas", "Judul", "Duedate", "Deskripsi", "Nilai", "Komentar", "Status Submission"};
-        boolean[] isEditable = {false,false,false,false,false,false,false,false,false,false};
+        String colTitles[] = {"No. ", "ID Quiz", "ID Kelas", "Nama Kelas", "Judul", "Duedate", "Deskripsi", "Status Submission"};
+        boolean[] isEditable = {false,false,false,false,false,false,false,false};
         model = new DefaultTableModel(colTitles, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -139,8 +139,12 @@ public class Quiz_Siswa extends javax.swing.JFrame {
             DBConnect c = connection;
             
             c.stat = c.conn.createStatement();
-            String sql = "SELECT * FROM viewSubmissionSiswa WHERE ID_Siswa = '" + OSSession.getId() + "' "
-                    + "AND Status='1'";
+//            String sql = "SELECT * FROM viewSubmissionSiswa WHERE ID_Siswa = '" + OSSession.getId() + "' "
+//                    + "AND Status='1'";
+            
+            String sql = "SELECT * FROM Quiz s JOIN Kelas k ON k.ID_Kelas = s.ID_Kelas WHERE "
+                    + "s.ID_Kelas IN (SELECT ID_Kelas FROM Pendaftaran WHERE ID_Siswa = '" + OSSession.getId() + "') "
+                    + "AND s.Status='1'";
             
             c.result = c.stat.executeQuery(sql);
             int no = 1;
@@ -148,7 +152,7 @@ public class Quiz_Siswa extends javax.swing.JFrame {
             while(c.result.next()) {
                 ResultSet r = c.result;
                 if(showQuiz(r.getString("ID_Quiz"))) {
-                    Object obj[] = new Object[10];
+                    Object obj[] = new Object[8];
                     obj[0] = no;
                     obj[1] = r.getString("ID_Quiz");
                     obj[2] = r.getString("ID_Kelas");
@@ -156,9 +160,7 @@ public class Quiz_Siswa extends javax.swing.JFrame {
                     obj[4] = r.getString("Judul");
                     obj[5] = datetimef.format(r.getTimestamp("Duedate"));
                     obj[6] = r.getString("Deskripsi");
-                    obj[7] = r.getString("Nilai") == null ? "-" : r.getString("Nilai");
-                    obj[8] = r.getString("Komentar") == null ? "-" : r.getString("Komentar");
-                    obj[9] = (checkQuiz(r.getString("ID_Quiz")) ? "Telah dikerjakan" : "Belum dikerjakan");
+                    obj[7] = (checkQuiz(r.getString("ID_Quiz")) ? "Telah dikerjakan" : "Belum dikerjakan");
 
 
                     no++;
@@ -278,7 +280,7 @@ public class Quiz_Siswa extends javax.swing.JFrame {
         if(i == -1 || id_submission.equals("")) {
             JOptionPane.showMessageDialog(this, "Silahkan pilih quiz untuk dikerjakan.", "Gagal", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            if(((String)model.getValueAt(i, 9)).equals("Telah dikerjakan")) {
+            if(((String)model.getValueAt(i, 7)).equals("Telah dikerjakan")) {
                 JOptionPane.showMessageDialog(this, "Quiz ini sudah dikerjakan.", "Gagal", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 sp.newJawaban(sp, id_submission);

@@ -44,11 +44,11 @@ public class KasirPage extends javax.swing.JFrame {
         MasterSiswa sis = new MasterSiswa();
         MasterKelas kel = new MasterKelas();
         MasterJadwal jad = new MasterJadwal();
-        Dashboard d = new Dashboard();
+        DashboardPegawai dp = new DashboardPegawai();
         Pendaftaran p = new Pendaftaran();
         LaporanPendaftaran lp = new LaporanPendaftaran();
         
-        Content.add("dashboard", d);
+        Content.add("dashboard", dp.getPanel());
         
         Content.add("masterKomputer", kom.getPanel());
         Content.add("masterSiswa", sis.getPanel());

@@ -169,7 +169,7 @@ public class Soal extends javax.swing.JFrame {
                 
                 JOptionPane.showMessageDialog(this, "Data soal berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
             } catch(SQLException e) {
-                System.out.println("Terjadi error pada saat tambah jadwal : " + e);
+                System.out.println("Terjadi error pada saat tambah quiz : " + e);
             }
         } else {
             JOptionPane.showMessageDialog(this, "Soal sudah mencapai maksimum.", "Informasi",  JOptionPane.INFORMATION_MESSAGE);
@@ -194,7 +194,7 @@ public class Soal extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(this, "Data Quiz berhasil diubah.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);            
         } catch(SQLException e) {
-            System.out.println("Terjadi error pada saat tambah jadwal : " + e);
+            System.out.println("Terjadi error pada saat ubah quiz : " + e);
         }
     }
     

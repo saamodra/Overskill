@@ -101,7 +101,7 @@ public class MasterPegawai extends javax.swing.JFrame {
             c.stat.close();
             c.result.close();
         } catch(SQLException e) {
-            System.out.println("Terjadi error saat load data user "  + e);
+            System.out.println("Terjadi error saat load data Pegawai "  + e);
         }
     }
     
@@ -250,7 +250,7 @@ public class MasterPegawai extends javax.swing.JFrame {
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
       
-        JDialog d = new JDialog(this , "Tambah User", true);  
+        JDialog d = new JDialog(this , "Tambah Pegawai", true);  
         d.setLayout( new FlowLayout() );  
         FormPegawai t = new FormPegawai(d);
         d.add(t.getPanel());
@@ -273,10 +273,10 @@ public class MasterPegawai extends javax.swing.JFrame {
                 int result = OSLib.deleteData("Pegawai", "ID_Pegawai", data[0]);
 
                 if(result == 1) {
-                    JOptionPane.showMessageDialog(this, "Data User berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Pegawai berhasil dihapus.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);
                     formLoad();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Data User gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Data Pegawai gagal dihapus.", "Gagal",  JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } else {
@@ -290,7 +290,7 @@ public class MasterPegawai extends javax.swing.JFrame {
         } 
         else 
         {
-            JDialog d = new JDialog(this , "Ubah User", true);  
+            JDialog d = new JDialog(this , "Ubah Pegawai", true);  
             d.setLayout( new FlowLayout() );  
             FormPegawai t = new FormPegawai(d, data);
 

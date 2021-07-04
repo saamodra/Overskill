@@ -121,7 +121,7 @@ public class Jawaban extends javax.swing.JFrame {
                 }
             }
             
-            JOptionPane.showMessageDialog(this, "Data soal berhasil disimpan.", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);   
+            JOptionPane.showMessageDialog(this, "Jawaban berhasil dikirim", "Berhasil",  JOptionPane.INFORMATION_MESSAGE);   
             
             ss.newSubmissionSiswa(ss);
         } else {
@@ -334,8 +334,11 @@ public class Jawaban extends javax.swing.JFrame {
     }//GEN-LAST:event_btnKembaliActionPerformed
 
     private void btnKirimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKirimActionPerformed
-        
-        saveData();
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Anda yakin ingin mengirim jawaban?",
+                "Peringatan", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            saveData();
+        }        
     }//GEN-LAST:event_btnKirimActionPerformed
 
     /**

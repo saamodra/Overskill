@@ -6,7 +6,6 @@
 package overskill;
 
 import java.awt.Font;
-import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -17,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-public class DashboardAdmin extends javax.swing.JFrame {
+public class DashboardSiswa extends javax.swing.JFrame {
     // Deklarasi connection
     DBConnect c = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
@@ -26,7 +25,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
     DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
     
     
-    public DashboardAdmin() {
+    public DashboardSiswa() {
         initComponents();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -48,9 +47,6 @@ public class DashboardAdmin extends javax.swing.JFrame {
         loadData("");
         tblDaftar.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         tblDaftar.getColumnModel().getColumn(0).setMaxWidth(50);
-        tblDaftar.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-        tblDaftar.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
-        tblDaftar.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
         // Menampilkan kolom minimal selebar data di cell (tidak menjadi ..)
         tblDaftar.packAll();
     }
@@ -61,7 +57,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
             // Membuat statement. Fungsinya agar bisa executeQuery
             c.stat = c.conn.createStatement();
             // sql query
-            String sql = "SELECT COUNT(*) as jumlah FROM Instruktur WHERE Status='1'";
+            String sql = "SELECT COUNT(*) as jumlah FROM Pendaftaran WHERE ID_Siswa = '" + OSSession.getId() + "'";
             
             // Mendapatkan result dari query yg dijalankan
             c.result = c.stat.executeQuery(sql);
@@ -72,21 +68,25 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 lblPermintaanPickup.setText(r.getString("jumlah"));
             }
             
-            sql = "SELECT COUNT(*) as jumlah FROM Siswa WHERE Status='1'";
+            sql = "SELECT COUNT(*) as jumlah FROM Jadwal j JOIN Kelas k ON j.ID_Kelas = k.ID_Kelas "
+                    + "JOIN Pendaftaran p ON p.ID_Kelas = k.ID_Kelas "
+                    + "WHERE p.ID_Siswa= '" + OSSession.getId() + "' AND j.Status='1'";
             c.result = c.stat.executeQuery(sql);
             while(c.result.next()) {
                 ResultSet r = c.result;
                 lblChecking.setText(r.getString("jumlah"));
             }
             
-            sql = "SELECT COUNT(*) as jumlah FROM Komputer WHERE Status='1'";
+            sql = "SELECT COUNT(*) as jumlah FROM Quiz j JOIN Kelas k ON j.ID_Kelas = k.ID_Kelas "
+                    + "JOIN Pendaftaran p ON p.ID_Kelas = k.ID_Kelas "
+                    + "WHERE p.ID_Siswa= '" + OSSession.getId() + "' AND j.Status='1'";
             c.result = c.stat.executeQuery(sql);
             while(c.result.next()) {
                 ResultSet r = c.result;
                 lblSending.setText(r.getString("jumlah"));
             }
             
-            sql = "SELECT COUNT(*) as jumlah FROM Kelas WHERE Status='1'";
+            sql = "SELECT COUNT(*) as jumlah FROM Feedback WHERE ID_Siswa = '" + OSSession.getId() + "' AND Status='1'";
             c.result = c.stat.executeQuery(sql);
             while(c.result.next()) {
                 ResultSet r = c.result;
@@ -130,7 +130,8 @@ public class DashboardAdmin extends javax.swing.JFrame {
             
             // Membuat statement baru
             c.stat = c.conn.createStatement();
-            String sql = "SELECT TOP(10) * FROM LaporanPendaftaran ORDER BY Tgl_Pendaftaran DESC";
+            String sql = "SELECT * FROM viewSubmissionSiswa WHERE ID_Instruktur = '" + OSSession.getId() + "' "
+                    + "AND Nilai IS NULL ORDER BY Terakhir_dimodifikasi DESC";
             
             // Menampung result ke c.result
             c.result = c.stat.executeQuery(sql);
@@ -260,7 +261,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Instruktur");
+        jLabel3.setText("Kelas");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -271,7 +272,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(lblPermintaanPickup))
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,7 +301,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Siswa");
+        jLabel4.setText("Jadwal");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -311,7 +312,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(lblChecking))
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -340,7 +341,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Komputer");
+        jLabel5.setText("Quiz");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -351,7 +352,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(lblSending))
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -380,7 +381,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Kelas");
+        jLabel6.setText("Feedback");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -391,7 +392,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(lblAll))
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -424,7 +425,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         jPanel12.setLayout(new javax.swing.BoxLayout(jPanel12, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
-        jLabel8.setText("Pendaftaran Terakhir");
+        jLabel8.setText("Quiz yang perlu dikerjakan");
         jPanel12.add(jLabel8);
 
         jPanel13.setBackground(new java.awt.Color(255, 255, 255));
@@ -433,7 +434,7 @@ public class DashboardAdmin extends javax.swing.JFrame {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 896, Short.MAX_VALUE)
+            .addGap(0, 838, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -517,21 +518,35 @@ public class DashboardAdmin extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DashboardAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DashboardSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DashboardAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DashboardSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DashboardAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DashboardSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DashboardAdmin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DashboardSiswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DashboardAdmin().setVisible(true);
+                new DashboardSiswa().setVisible(true);
             }
         });
     }

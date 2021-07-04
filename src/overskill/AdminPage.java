@@ -48,7 +48,7 @@ public class AdminPage extends javax.swing.JFrame {
         MasterSiswa sis = new MasterSiswa();
         MasterKelas kel = new MasterKelas();
         MasterJadwal jad = new MasterJadwal();
-        DashboardAdmin d = new DashboardAdmin();
+        DashboardPegawai d = new DashboardPegawai();
         Pendaftaran p = new Pendaftaran();
         LaporanPendaftaran lp = new LaporanPendaftaran();
         
@@ -360,7 +360,7 @@ public class AdminPage extends javax.swing.JFrame {
         iconProduk.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         iconProduk.setForeground(new java.awt.Color(255, 255, 255));
         iconProduk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/male_user_25px.png"))); // NOI18N
-        iconProduk.setText("   Master User");
+        iconProduk.setText("   Master Pegawai");
         Slide.add(iconProduk, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 190, 200, 50));
 
         btnMasterUser.setBackground(new java.awt.Color(42, 64, 84));
@@ -536,7 +536,6 @@ public class AdminPage extends javax.swing.JFrame {
         iconDriver3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add_user_male_25px.png"))); // NOI18N
         iconDriver3.setText(" Laporan Pendaftaran");
         Slide.add(iconDriver3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 540, 200, 50));
-        iconDriver3.getAccessibleContext().setAccessibleName(" Laporan Pendaftaran");
 
         mark9.setBackground(new java.awt.Color(255, 129, 5));
 

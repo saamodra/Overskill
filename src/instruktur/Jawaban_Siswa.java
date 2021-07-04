@@ -82,7 +82,7 @@ public class Jawaban_Siswa extends javax.swing.JFrame {
         int nilai = (int)txtNilai.getValue();
         
         try {
-            String query = "UPDATE Quiz_Siswa SET Nilai=?, Komentar=? WHERE ID_QuizSiswa=?";
+            String query = "UPDATE QuizSiswa SET Nilai=?, Komentar=? WHERE ID_QuizSiswa=?";
 
             try (PreparedStatement p = c.conn.prepareStatement(query)) {
                 p.setFloat(1, nilai);

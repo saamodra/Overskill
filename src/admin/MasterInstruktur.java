@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package admin;
 
 import admin.form.FormInstruktur;
@@ -18,18 +13,12 @@ import javax.swing.table.DefaultTableModel;
 import overskill.DBConnect;
 import overskill.OSLib;
 
-/**
- *
- * @author samod
- */
 public class MasterInstruktur extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
     DefaultTableModel model = new DefaultTableModel();
     private String data[];
     
-    /**
-     * Creates new form User
-     */
+
     public MasterInstruktur() {
         initComponents();
         addMouseClickEventListener();
@@ -41,7 +30,6 @@ public class MasterInstruktur extends javax.swing.JFrame {
         data = new String[9];
         addColumn();
     }
-
     
     private void addColumn() {
         

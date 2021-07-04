@@ -31,6 +31,18 @@
 	<field name="Status" class="java.lang.String"/>
 	<field name="Nama_Kelas" class="java.lang.String"/>
 	<field name="ID_Instruktur" class="java.lang.String"/>
+	<variable name="Nilai_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{Nilai}]]></variableExpression>
+	</variable>
+	<variable name="Nilai_2" class="java.lang.Double" calculation="Average">
+		<variableExpression><![CDATA[$F{Nilai}]]></variableExpression>
+	</variable>
+	<variable name="Nilai_3" class="java.lang.Double" calculation="Highest">
+		<variableExpression><![CDATA[$F{Nilai}]]></variableExpression>
+	</variable>
+	<variable name="Nilai_4" class="java.lang.Double" calculation="Lowest">
+		<variableExpression><![CDATA[$F{Nilai}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -127,14 +139,14 @@
 				<text><![CDATA[Nama Siswa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8d40d222-752a-4d53-9f4e-87b246f9bb22" style="Column header" x="408" y="8" width="37" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<reportElement uuid="8d40d222-752a-4d53-9f4e-87b246f9bb22" style="Column header" x="515" y="8" width="37" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="13" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nilai]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b6d465c5-a513-4652-9b09-d9cab1b34125" style="Column header" x="445" y="8" width="107" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
+				<reportElement uuid="b6d465c5-a513-4652-9b09-d9cab1b34125" style="Column header" x="408" y="8" width="107" height="18" forecolor="#FFFFFF" backcolor="#F57900"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Product Sans" size="13" isBold="true"/>
 				</textElement>
@@ -167,15 +179,15 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="">
-					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="408" y="0" width="37" height="18"/>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="515" y="0" width="37" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{Nilai}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{Nilai} == null) ? "-" : $F{Nilai}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy HH:mm">
-					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="445" y="0" width="107" height="18"/>
+					<reportElement uuid="54a7957e-c050-4f50-855d-87870a30dd17" style="Detail" positionType="Float" x="408" y="0" width="107" height="18"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="Arial" size="11"/>
 					</textElement>
@@ -229,4 +241,88 @@
 			</frame>
 		</band>
 	</pageFooter>
+	<summary>
+		<band height="103">
+			<rectangle>
+				<reportElement uuid="9496411d-c1e4-4651-8b7c-516e5043c3cc" x="0" y="0" width="555" height="20" backcolor="#DCDCDC"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="eb24391c-1279-4285-8e74-3d2f4d1920a9" x="33" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="670ec0d8-23d9-465f-9c6e-0b154e28c733" x="490" y="0" width="62" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Nilai_1}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="9496411d-c1e4-4651-8b7c-516e5043c3cc" x="0" y="20" width="555" height="20" backcolor="#DCDCDC"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="eb24391c-1279-4285-8e74-3d2f4d1920a9" x="33" y="20" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TERTINGGI]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="9496411d-c1e4-4651-8b7c-516e5043c3cc" x="0" y="40" width="555" height="20" backcolor="#DCDCDC"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="eb24391c-1279-4285-8e74-3d2f4d1920a9" x="33" y="40" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TERENDAH]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dcd8c09f-bed1-4ff6-bd1e-dbe8a239716a" x="490" y="20" width="62" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Nilai_3}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="9496411d-c1e4-4651-8b7c-516e5043c3cc" x="0" y="60" width="555" height="20" backcolor="#DCDCDC"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="eb24391c-1279-4285-8e74-3d2f4d1920a9" x="33" y="60" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[RATA-RATA]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c1d94831-2ce3-4753-8161-7d5be6c38990" x="490" y="60" width="62" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#.00").format($V{Nilai_2})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="30c5c957-1e75-45f5-9f74-6e3b76004a01" x="490" y="40" width="62" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Nilai_4}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>

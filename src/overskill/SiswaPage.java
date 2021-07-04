@@ -39,12 +39,12 @@ public class SiswaPage extends javax.swing.JFrame {
         
         // Mengganti nama user dengan nama akun yang sudah login.
         MasterPegawai u = new MasterPegawai();
-        Dashboard d = new Dashboard();
+        DashboardSiswa ds = new DashboardSiswa();
         Quiz_Siswa ss = new Quiz_Siswa(this);
         Feedback fd = new Feedback();
         Jawaban jwb = new Jawaban();
         
-        Content.add("dashboard", d);
+        Content.add("dashboard", ds.getPanel());
         Content.add("submission_siswa", ss.getPanel());
         Content.add("feedback", fd.getPanel());
         Content.add("jawaban", jwb.getPanel());
@@ -58,6 +58,7 @@ public class SiswaPage extends javax.swing.JFrame {
         
         setMark(mark1);
         
+        textNama.setText(OSSession.getNama());
         // Membuat Fungsi Sidebar menjadi full saat maximize.
         this.addWindowStateListener(new WindowStateListener() {
 

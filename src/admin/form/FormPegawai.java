@@ -194,9 +194,9 @@ public class FormPegawai extends javax.swing.JFrame {
     }
     
     private boolean validateAll() {
-        boolean nama = OSLib.fieldRequired(txtNoTelp.getText(), lblNama);
+        boolean nama = OSLib.fieldRequired(txtNama.getText(), lblNama);
         boolean jenkel = OSLib.toggleRequired(lblJenkel, rdLaki.isSelected(), rdPerempuan.isSelected());
-        boolean alamat = OSLib.fieldRequired(txtNoTelp.getText(), lblAlamat);
+        boolean alamat = OSLib.fieldRequired(txtAlamat.getText(), lblAlamat);
         boolean notelp = OSLib.fieldRequired(txtNoTelp.getText(), lblNoTelp);
         boolean email = OSLib.emailRequired(txtEmail.getText(), lblEmail);
         boolean username = OSLib.fieldRequired(txtUsername.getText(), lblUsername);

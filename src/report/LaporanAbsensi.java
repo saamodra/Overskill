@@ -20,7 +20,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JRViewer;
 import overskill.DBConnect;
-import overskill.OSLib;
 import overskill.OSSession;
 
 /**

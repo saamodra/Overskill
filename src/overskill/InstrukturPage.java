@@ -45,7 +45,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         // Mengganti nama user dengan nama akun yang sudah login.
         txtNamaUser.setText(OSSession.getNama());
         
-        Dashboard d = new Dashboard();
+        DashboardInstruktur di = new DashboardInstruktur();
         Absensi absen = new Absensi();
         Quiz s = new Quiz();
         Soal so = new Soal();
@@ -57,7 +57,7 @@ public class InstrukturPage extends javax.swing.JFrame {
         LaporanFeedback lf = new LaporanFeedback();
         
         
-        Content.add("dashboard", d);
+        Content.add("dashboard", di.getPanel());
         
         Content.add("absensi", absen.getPanel());
         Content.add("submission", s.getPanel());

@@ -24,7 +24,6 @@ import overskill.OSLib;
  */
 public class LaporanPendaftaran extends javax.swing.JFrame {
     DBConnect connection = new DBConnect();
-    DefaultTableModel model = new DefaultTableModel();
     
     /**
      * Creates new form User
@@ -33,7 +32,6 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
         initComponents();
         OSLib.setDefaultDateFilter(tglAkhir, tglAwal, 2020);
     }
-    
     
     private void formLoad() {
         HashMap<String, Object> map = new HashMap<>();
@@ -49,7 +47,6 @@ public class LaporanPendaftaran extends javax.swing.JFrame {
             pnlMaster.repaint();
             pnlMaster.add(jr);
             pnlMaster.revalidate();
-            
         } catch(JRException e) {
             System.out.println(e.toString());
         }
